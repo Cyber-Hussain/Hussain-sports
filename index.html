@@ -183,6 +183,9 @@
                         <p style="font-size: 15px; margin-bottom: 10px; color: var(--accent); font-weight: 600;">💳 Step 1: Send Payment Online</p>
                         <p style="font-size: 14px; color: var(--text-main); margin-bottom: 5px;">Account Title: <strong>Mohammad Hussain</strong></p>
                         <p style="font-size: 14px; color: var(--text-main); margin-bottom: 15px;">JazzCash / EasyPaisa / Bank: <strong>03014446096</strong></p>
+                        
+                        <label style="color: var(--accent); font-size: 13px; margin-bottom: 4px; display: block;">Upload Payment Screenshot / Receipt:</label>
+                        <input type="file" id="payment-screenshot" accept="image/*" style="background: var(--bg-main); padding: 8px; font-size: 13px; margin-bottom: 0; width: 100%;">
                     </div>
                     <label>Complete Shipping Address:</label>
                     <textarea id="cust-address" rows="3" required placeholder="House #, Street, City"></textarea>
@@ -555,20 +558,35 @@
                 return;
             }
 
-            const orderPayload = {
-                customerName, email, mobile, paymentMethod, address,
-                items: cart,
-                date: new Date().toLocaleString()
-            };
+            const formData = new FormData();
+            formData.append('customerName', customerName);
+            formData.append('email', email);
+            formData.append('mobile', mobile);
+            formData.append('paymentMethod', paymentMethod);
+            formData.append('address', address);
+            formData.append('items', JSON.stringify(cart));
+            formData.append('date', new Date().toLocaleString());
+
+            if (paymentMethod === 'Advance') {
+                const screenshotFile = document.getElementById('payment-screenshot').files[0];
+                if (screenshotFile) {
+                    formData.append('paymentScreenshot', screenshotFile);
+                }
+            }
 
             try {
                 const res = await fetch('/api/orders', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderPayload)
+                    body: formData
                 });
                 const data = await res.json();
-                orderPayload.trackingNumber = data.trackingNumber;
+                
+                const orderPayload = {
+                    customerName, email, mobile, paymentMethod, address,
+                    items: cart,
+                    date: new Date().toLocaleString(),
+                    trackingNumber: data.trackingNumber
+                };
 
                 alert(data.message);
                 if (confirm("Would you like to download your Official Order Receipt & Tracking PDF?")) {
@@ -733,26 +751,6 @@
                 }
             } catch (err) {
                 console.error("Error updating stock:", err);
-            }
-        }
-
-        async function updateProductStockStatus(productId) {
-            const newStatus = document.getElementById(`stock-status-${productId}`).value === 'true';
-            try {
-                const res = await fetch('/api/admin/products/stock', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: adminPassToken, productId, inStock: newStatus })
-                });
-                const data = await res.json();
-                if(data.success) {
-                    loadAdminProducts();
-                    fetchProducts();
-                } else {
-                    alert(data.message);
-                }
-            } catch (err) {
-                console.error("Error updating stock status:", err);
             }
         }
 
