@@ -68,6 +68,40 @@
         table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-top: 15px; }
         th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
         th { background: rgba(99, 102, 241, 0.1); color: var(--accent); }
+
+        /* --- Mobile Responsive Fixes --- */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 12px;
+            }
+            nav {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            nav button {
+                margin-left: 0 !important;
+                font-size: 14px;
+            }
+            .container {
+                margin: 20px auto;
+                padding: 0 10px;
+            }
+            .controls-bar {
+                flex-direction: column;
+            }
+            .controls-bar input, .controls-bar select {
+                width: 100%;
+            }
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
     </style>
 </head>
 <body>
