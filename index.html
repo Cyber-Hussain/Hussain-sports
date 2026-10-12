@@ -75,7 +75,7 @@
 
         /* --- HEADER --- */
         header {
-            background: #121418; border-bottom: 2px solid var(--border-color);
+            background: #121418; border-bottom: 1px solid var(--border-color);
             padding: 15px 40px; display: flex; justify-content: space-between;
             align-items: center; position: sticky; top: 0; z-index: 100;
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
@@ -108,6 +108,22 @@
             cursor: pointer; transition: color 0.3s;
         }
         nav button:hover, nav button.active { color: var(--primary-red); }
+
+        /* --- CATEGORIES SUB-NAVBAR --- */
+        .categories-nav {
+            background: #111113; border-bottom: 2px solid var(--border-color);
+            padding: 0 20px; display: flex; justify-content: center; align-items: center;
+            gap: 25px; overflow-x: auto; white-space: nowrap; scrollbar-width: none;
+        }
+        .categories-nav::-webkit-scrollbar { display: none; }
+        .cat-item {
+            color: #d1d5db; font-size: 13px; font-weight: 800; padding: 12px 5px;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 4px; transition: color 0.2s, border-color 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .cat-item:hover, .cat-item.active { color: #ffffff; border-bottom-color: var(--primary-red); }
+        .cat-item.sale-item { color: var(--primary-red); }
 
         /* --- HERO BANNER --- */
         .hero-banner {
@@ -142,13 +158,12 @@
         .product-price { font-size: 18px; color: #fff; font-weight: 800; }
         .old-price { font-size: 13px; color: var(--text-muted); text-decoration: line-through; }
 
-        .color-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
         .size-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
         
-        .size-options { display: flex; gap: 8px; margin-bottom: 15px; }
+        .size-options { display: flex; gap: 6px; margin-bottom: 15px; flex-wrap: wrap; }
         .size-btn {
             background: #111318; border: 1px solid var(--border-color); color: #fff;
-            padding: 6px 12px; font-size: 11px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: 0.2s;
+            padding: 5px 10px; font-size: 11px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: 0.2s;
         }
         .size-btn.selected { border-color: var(--primary-red); background: rgba(230,25,25,0.2); color: var(--primary-red); }
 
@@ -195,6 +210,7 @@
             .header-search { margin: 10px 0; width: 100%; max-width: 100%; }
             nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
             nav button { margin-left: 0; }
+            .categories-nav { justify-content: flex-start; padding: 0 10px; }
             .hero-title { font-size: 26px; }
             .hero-subtitle { font-size: 15px; }
             table { display: block; overflow-x: auto; white-space: nowrap; }
@@ -237,6 +253,19 @@
             <button onclick="switchTab('cart')" id="nav-cart">🛒 Cart (<span id="cart-count">0</span>)</button>
         </nav>
     </header>
+
+    <!-- CATEGORIES SUB-NAVBAR -->
+    <div class="categories-nav">
+        <div class="cat-item active" onclick="filterByCategory('All', this)">SHOP BY ⌄</div>
+        <div class="cat-item" onclick="filterByCategory('Football', this)">MEN ⌄</div>
+        <div class="cat-item" onclick="filterByCategory('Cricket', this)">KIDS ⌄</div>
+        <div class="cat-item" onclick="filterBySubCategory('Jerseys', this)">FOOTBALL T-SHIRT ⌄</div>
+        <div class="cat-item" onclick="filterBySubCategory('Accessories', this)">SPORTS ITEMS ⌄</div>
+        <div class="cat-item" onclick="filterBySubCategory('Cleats', this)">SHOES ⌄</div>
+        <div class="cat-item sale-item" onclick="filterBySubCategory('Jerseys', this)">SALE</div>
+        <div class="cat-item" onclick="filterByCategory('All', this)">TOP SELLING</div>
+        <div class="cat-item" onclick="alert('Hussain Sports - Premium Quality Sports Apparel & Gear Store in Pakistan.')">ABOUT US</div>
+    </div>
 
     <!-- HERO BANNER -->
     <div class="hero-banner">
@@ -456,7 +485,33 @@
             products.forEach(p => {
                 let stockQty = p.stock !== undefined ? p.stock : 10;
                 let available = p.inStock && stockQty > 0;
-                let oldPrice = Math.round(p.price * 1.3); // Fake 30% higher original slashed price
+                let oldPrice = Math.round(p.price * 1.3);
+
+                let isJersey = (p.subCategory && p.subCategory.toLowerCase() === 'jerseys') || (p.name && p.name.toLowerCase().includes('jersey'));
+                let isShoe = (p.subCategory && p.subCategory.toLowerCase() === 'cleats') || (p.name && (p.name.toLowerCase().includes('shoe') || p.name.toLowerCase().includes('cleat') || p.name.toLowerCase().includes('boot') || p.name.toLowerCase().includes('f50') || p.name.toLowerCase().includes('predator')));
+                
+                let sizeHtml = '';
+                if (isJersey) {
+                    sizeHtml = `
+                        <div class="size-label">Size: Choose size</div>
+                        <div class="size-options" id="sizes-${p.id}">
+                            <button class="size-btn selected" onclick="selectSize(${p.id}, 'LARGE (L)', this)">LARGE (L)</button>
+                            <button class="size-btn" onclick="selectSize(${p.id}, 'MEDIUM (M)', this)">MEDIUM (M)</button>
+                        </div>
+                    `;
+                } else if (isShoe) {
+                    sizeHtml = `
+                        <div class="size-label">Size (UK): Choose shoe size</div>
+                        <div class="size-options" id="sizes-${p.id}">
+                            <button class="size-btn" onclick="selectSize(${p.id}, 'UK 6', this)">UK 6</button>
+                            <button class="size-btn" onclick="selectSize(${p.id}, 'UK 7', this)">UK 7</button>
+                            <button class="size-btn selected" onclick="selectSize(${p.id}, 'UK 8', this)">UK 8</button>
+                            <button class="size-btn" onclick="selectSize(${p.id}, 'UK 9', this)">UK 9</button>
+                            <button class="size-btn" onclick="selectSize(${p.id}, 'UK 10', this)">UK 10</button>
+                            <button class="size-btn" onclick="selectSize(${p.id}, 'UK 11', this)">UK 11</button>
+                        </div>
+                    `;
+                }
 
                 list.innerHTML += `
                     <div class="product-card">
@@ -470,11 +525,7 @@
                                     <span class="product-price">Rs ${p.price}.00</span>
                                     <span class="old-price">Rs ${oldPrice}.00</span>
                                 </div>
-                                <div class="size-label">Size: Choose size</div>
-                                <div class="size-options" id="sizes-${p.id}">
-                                    <button class="size-btn selected" onclick="selectSize(${p.id}, 'LARGE (L)', this)">LARGE (L)</button>
-                                    <button class="size-btn" onclick="selectSize(${p.id}, 'MEDIUM (M)', this)">MEDIUM (M)</button>
-                                </div>
+                                ${sizeHtml}
                             </div>
                             <div>
                                 <div class="qty-add-box">
@@ -483,9 +534,9 @@
                                         <input type="text" id="qty-${p.id}" value="1" readonly>
                                         <button onclick="adjustQty(${p.id}, 1)">+</button>
                                     </div>
-                                    <button class="add-to-cart-btn" onclick="addToCartWithOptions(${p.id})" ${!available ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>🛒 Add</button>
+                                    <button class="add-to-cart-btn" onclick="addToCartWithOptions(${p.id}, ${isJersey}, ${isShoe})" ${!available ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>🛒 Add</button>
                                 </div>
-                                <button class="quick-buy-btn" onclick="quickBuy(${p.id})">⚡ Quick Buy</button>
+                                <button class="quick-buy-btn" onclick="quickBuy(${p.id}, ${isJersey}, ${isShoe})">⚡ Quick Buy</button>
                             </div>
                         </div>
                     </div>
@@ -493,12 +544,13 @@
             });
         }
 
-        // Store selected sizes temporarily per product
         let selectedCardSizes = {};
         function selectSize(productId, sizeName, btnElement) {
             selectedCardSizes[productId] = sizeName;
             const container = document.getElementById(`sizes-${productId}`);
-            container.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+            if(container) {
+                container.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+            }
             btnElement.classList.add('selected');
         }
 
@@ -509,26 +561,33 @@
             input.value = val;
         }
 
-        function addToCartWithOptions(id) {
+        function addToCartWithOptions(id, isJersey, isShoe) {
             const product = allProducts.find(p => p.id === id);
             const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
-            const chosenSize = selectedCardSizes[id] || 'LARGE (L)';
+            
+            let defaultSize = '';
+            if (isJersey) defaultSize = 'LARGE (L)';
+            if (isShoe) defaultSize = 'UK 8';
+
+            const chosenSize = (isJersey || isShoe) ? (selectedCardSizes[id] || defaultSize) : '';
 
             if (product) {
-                const uniqueKey = `${product.id}-${chosenSize}`;
+                const uniqueKey = (isJersey || isShoe) ? `${product.id}-${chosenSize}` : `${product.id}-nosize`;
                 const existing = cart.find(i => i.uniqueKey === uniqueKey);
+                const itemName = (isJersey || isShoe) ? `${product.name} [Size: ${chosenSize}]` : product.name;
+
                 if (existing) {
                     existing.quantity += qty;
                 } else {
-                    cart.push({ ...product, uniqueKey, size: chosenSize, quantity: qty, name: `${product.name} [Size: ${chosenSize}]` });
+                    cart.push({ ...product, uniqueKey, size: chosenSize, quantity: qty, name: itemName });
                 }
                 updateCartUI();
-                alert(`${product.name} (${chosenSize}) x ${qty} added to cart!`);
+                alert(`${itemName} x ${qty} added to cart!`);
             }
         }
 
-        function quickBuy(id) {
-            addToCartWithOptions(id);
+        function quickBuy(id, isJersey, isShoe) {
+            addToCartWithOptions(id, isJersey, isShoe);
             switchTab('cart');
         }
 
@@ -538,6 +597,22 @@
             const subcat = document.getElementById('filter-subcategory').value;
             const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query) && (cat === 'All' || p.category === cat) && (subcat === 'All' || p.subCategory === subcat));
             displayProducts(filtered);
+        }
+
+        function filterByCategory(catName, el) {
+            document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+            if(el) el.classList.add('active');
+            document.getElementById('filter-category').value = catName;
+            filterProducts();
+            switchTab('shop');
+        }
+
+        function filterBySubCategory(subCatName, el) {
+            document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+            if(el) el.classList.add('active');
+            document.getElementById('filter-subcategory').value = subCatName;
+            filterProducts();
+            switchTab('shop');
         }
 
         function updateCartUI() {
