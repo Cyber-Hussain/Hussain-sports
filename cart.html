@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hussain Sports 🏆 - Shopping Cart & Checkout</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --border: #334155;
+            --radius: 12px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 700; color: var(--accent); letter-spacing: 1px; cursor: pointer; user-select: none; }
+        nav button { background: transparent; border: none; color: var(--text-muted); font-size: 16px; font-weight: 600; margin-left: 20px; cursor: pointer; transition: color 0.3s; }
+        nav button:hover, nav button.active { color: var(--accent); }
+        
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; }
+        
+        #cart-items { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow); }
+        
+        form label { display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 500; }
+        form input, form select, form textarea { width: 100%; padding: 12px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius); margin-bottom: 15px; font-size: 15px; outline: none; }
+        
+        .action-btn { background: var(--accent); color: white; border: none; padding: 14px; border-radius: var(--radius); font-weight: 600; cursor: pointer; transition: background 0.3s; width: 100%; font-size: 16px; }
+        .action-btn:hover { background: var(--accent-hover); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="window.location.href='index.html'">Hussain Sports 🏆</div>
+        <nav>
+            <button onclick="window.location.href='index.html'">Shop</button>
+            <button onclick="window.location.href='track.html'">Track Order</button>
+            <button onclick="window.location.href='cart.html'" class="active">Cart (<span id="cart-count">0</span>)</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 style="margin-bottom: 25px;">Your Shopping Cart & Checkout</h2>
+        
+        <!-- Cart Items List -->
+        <div id="cart-items">
+            <p style="color: var(--text-muted);">Your cart is empty.</p>
+        </div>
+        
+        <!-- Checkout Section -->
+        <div id="checkout-section" style="display: none; background: var(--bg-card); padding: 30px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow);">
+            <h3 style="border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px;">Checkout Details</h3>
+            <form id="order-form" onsubmit="placeOrder(event)">
+                <label>Full Name:</label>
+                <input type="text" id="cust-name" required placeholder="e.g. Muhammad Hussain">
+
+                <label>Email Address:</label>
+                <input type="email" id="cust-email" required placeholder="e.g. hussain@example.com">
+
+                <label>Mobile Number:</label>
+                <input type="text" id="cust-mobile" required placeholder="0301234567">
+
+                <label>Payment Method:</label>
+                <select id="cust-payment" required onchange="togglePaymentFields()">
+                    <option value="COD">Cash on Delivery (COD)</option>
+                    <option value="Advance">Advance Payment (JazzCash / Bank Transfer)</option>
+                </select>
+
+                <div id="advance-payment-info" style="display: none; background: rgba(99, 102, 241, 0.1); padding: 20px; border-radius: var(--radius); border: 1px solid var(--accent); margin-bottom: 20px;">
+                    <p style="font-size: 15px; margin-bottom: 10px; color: var(--accent); font-weight: 600;">💳 Step 1: Send Payment Online</p>
+                    <p style="font-size: 14px; color: var(--text-main); margin-bottom: 5px;">Account Title: <strong>Mohammad Hussain</strong></p>
+                    <p style="font-size: 14px; color: var(--text-main); margin-bottom: 15px;">JazzCash / EasyPaisa / Bank: <strong>03014446096</strong></p>
+                </div>
+
+                <label>Complete Shipping Address:</label>
+                <textarea id="cust-address" rows="3" required placeholder="House #, Street, City"></textarea>
+
+                <button type="submit" class="action-btn" style="margin-top: 10px;">Confirm & Place Order</button>
+                <button type="button" class="action-btn" style="margin-top: 10px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);" onclick="orderViaWhatsApp()">📱 Order via WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Printable Invoice Template -->
+    <div id="invoice-template" style="display: none; padding: 30px; background: #ffffff; color: #000000; font-family: Arial, sans-serif;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #6366f1; padding-bottom: 15px; margin-bottom: 20px;">
+            <div>
+                <h1 style="color: #6366f1; margin: 0; font-size: 24px;">Hussain Sports 🏆</h1>
+                <p style="margin: 5px 0 0 0; color: #555; font-size: 12px;">Official Order Receipt & Tax Invoice</p>
+            </div>
+            <div style="text-align: right;">
+                <h3 style="margin: 0; color: #333;" id="inv-order-id">Order #000</h3>
+                <p style="margin: 5px 0 0 0; color: #6366f1; font-weight: bold; font-size: 13px;" id="inv-tracking">Tracking: HS-0000-PK</p>
+                <p style="margin: 3px 0 0 0; color: #777; font-size: 11px;" id="inv-date">Date: DD/MM/YYYY</p>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
+            <div>
+                <h4 style="margin: 0 0 5px 0; color: #333;">Customer Info:</h4>
+                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-name">Name: -</p>
+                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-mobile">Mobile: -</p>
+                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-email">Email: -</p>
+            </div>
+            <div style="text-align: right;">
+                <h4 style="margin: 0 0 5px 0; color: #333;">Delivery Address & Payment:</h4>
+                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-address">Address: -</p>
+                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-payment">Payment: COD</p>
+            </div>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; color: #000;" id="inv-items-table">
+            <thead>
+                <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+                    <th style="padding: 10px; text-align: left; font-size: 13px;">Item Description</th>
+                    <th style="padding: 10px; text-align: center; font-size: 13px;">Qty</th>
+                    <th style="padding: 10px; text-align: right; font-size: 13px;">Unit Price</th>
+                    <th style="padding: 10px; text-align: right; font-size: 13px;">Total</th>
+                </tr>
+            </thead>
+            <tbody id="inv-items-body"></tbody>
+        </table>
+
+        <div style="text-align: right; border-top: 2px solid #cbd5e1; padding-top: 10px;">
+            <h3 style="margin: 0; color: #16a34a;" id="inv-grand-total">Grand Total: PKR 0</h3>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center; border-top: 1px dashed #ccc; padding-top: 15px; font-size: 11px; color: #777;">
+            Thank you for shopping with Hussain Sports! For support, contact us on WhatsApp: +923014446096
+        </div>
+    </div>
+
+    <script>
+        // Load cart from localStorage so it syncs across pages
+        let cart = JSON.parse(localStorage.getItem('hussain_cart')) || [];
+
+        function updateCartUI() {
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').innerText = totalCount;
+            
+            const container = document.getElementById('cart-items');
+            const checkoutSec = document.getElementById('checkout-section');
+
+            if (cart.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted);">Your cart is empty.</p>`;
+                checkoutSec.style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = '';
+            let grandTotal = 0;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                grandTotal += itemTotal;
+
+                container.innerHTML += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <span style="color: var(--text-muted); font-size: 13px;">PKR ${item.price} each</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <button style="background: var(--border); color: white; border: none; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-weight: bold;" onclick="changeQuantity(${index}, -1)">-</button>
+                            <span style="font-weight: 600; min-width: 20px; text-align: center;">${item.quantity}</span>
+                            <button style="background: var(--border); color: white; border: none; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-weight: bold;" onclick="changeQuantity(${index}, 1)">+</button>
+                            <span style="margin-left: 15px; font-weight: 600; color: var(--success);">PKR ${itemTotal}</span>
+                            <button style="background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; margin-left: 10px;" onclick="removeFromCart(${index})">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML += `<div style="margin-top: 15px; font-size: 18px; font-weight: 700; text-align: right; color: var(--success);">Grand Total: PKR ${grandTotal}</div>`;
+            checkoutSec.style.display = 'block';
+            
+            // Save state
+            localStorage.setItem('hussain_cart', JSON.stringify(cart));
+        }
+
+        function changeQuantity(index, delta) {
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function togglePaymentFields() {
+            const paymentMethod = document.getElementById('cust-payment').value;
+            document.getElementById('advance-payment-info').style.display = (paymentMethod === 'Advance') ? 'block' : 'none';
+        }
+
+        function downloadReceiptPDF(orderData) {
+            document.getElementById('inv-order-id').innerText = `Order #${orderData.id || 'NEW'}`;
+            document.getElementById('inv-tracking').innerText = `Tracking: ${orderData.trackingNumber || 'HS-PENDING'}`;
+            document.getElementById('inv-date').innerText = `Date: ${orderData.date || new Date().toLocaleString()}`;
+            document.getElementById('inv-cust-name').innerText = `Name: ${orderData.customerName}`;
+            document.getElementById('inv-cust-mobile').innerText = `Mobile: ${orderData.mobile}`;
+            document.getElementById('inv-cust-email').innerText = `Email: ${orderData.email || 'N/A'}`;
+            document.getElementById('inv-cust-address').innerText = `Address: ${orderData.address}`;
+            document.getElementById('inv-cust-payment').innerText = `Payment: ${orderData.paymentMethod}`;
+
+            const tbody = document.getElementById('inv-items-body');
+            tbody.innerHTML = '';
+            let grandTotal = 0;
+
+            orderData.items.forEach(item => {
+                const qty = item.quantity || 1;
+                const total = item.price * qty;
+                grandTotal += total;
+
+                tbody.innerHTML += `
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 10px; font-size: 12px;">${item.name}</td>
+                        <td style="padding: 10px; text-align: center; font-size: 12px;">${qty}</td>
+                        <td style="padding: 10px; text-align: right; font-size: 12px;">PKR ${item.price}</td>
+                        <td style="padding: 10px; text-align: right; font-size: 12px;">PKR ${total}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('inv-grand-total').innerText = `Grand Total: PKR ${grandTotal}`;
+
+            const element = document.getElementById('invoice-template');
+            element.style.display = 'block';
+
+            const opt = {
+                margin: 0.5,
+                filename: `HussainSports_Invoice_${orderData.trackingNumber || 'Receipt'}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none';
+            });
+        }
+
+        async function placeOrder(e) {
+            e.preventDefault();
+            
+            const customerName = document.getElementById('cust-name').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+            const mobile = document.getElementById('cust-mobile').value.trim();
+            const paymentMethod = document.getElementById('cust-payment').value;
+            const address = document.getElementById('cust-address').value.trim();
+
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            const orderPayload = {
+                customerName, email, mobile, paymentMethod, address,
+                items: cart,
+                date: new Date().toLocaleString()
+            };
+
+            try {
+                const res = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderPayload)
+                });
+                
+                const data = await res.json();
+                orderPayload.trackingNumber = data.trackingNumber;
+
+                alert(data.message);
+                
+                if (confirm("Would you like to download your Official Order Receipt & Tracking PDF?")) {
+                    downloadReceiptPDF(orderPayload);
+                }
+
+                cart = [];
+                localStorage.removeItem('hussain_cart');
+                updateCartUI();
+                document.getElementById('order-form').reset();
+                document.getElementById('advance-payment-info').style.display = 'none';
+                window.location.href = 'index.html';
+            } catch (err) {
+                console.error("Error placing order:", err);
+                alert("Failed to place order.");
+            }
+        }
+
+        function orderViaWhatsApp() {
+            const customerName = document.getElementById('cust-name').value.trim();
+            const mobile = document.getElementById('cust-mobile').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+
+            if (!customerName || !mobile || !address) {
+                alert("Please fill in required fields!");
+                return;
+            }
+
+            let itemsText = "";
+            let grandTotal = 0;
+            cart.forEach((item) => {
+                const subTotal = item.price * item.quantity;
+                itemsText += `\n- ${item.name} x ${item.quantity} (PKR ${subTotal})`;
+                grandTotal += subTotal;
+            });
+
+            const encodedMessage = encodeURIComponent(`New Order - Hussain Sports 🏆\nName: ${customerName}\nMobile: ${mobile}\nAddress: ${address}\nItems:${itemsText}\nGrand Total: PKR ${grandTotal}`);
+            window.open(`https://wa.me/923014446096?text=${encodedMessage}`, '_blank');
+        }
+
+        // Initialize cart on load
+        updateCartUI();
+    </script>
+</body>
+</html>

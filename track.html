@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hussain Sports 🏆 - Track Order</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --border: #334155;
+            --radius: 12px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 700; color: var(--accent); letter-spacing: 1px; cursor: pointer; user-select: none; }
+        nav button { background: transparent; border: none; color: var(--text-muted); font-size: 16px; font-weight: 600; margin-left: 20px; cursor: pointer; transition: color 0.3s; }
+        nav button:hover, nav button.active { color: var(--accent); }
+        
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; }
+        
+        .action-btn { background: var(--accent); color: white; border: none; padding: 12px 20px; border-radius: var(--radius); font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        .action-btn:hover { background: var(--accent-hover); }
+        
+        form input { width: 100%; padding: 12px; background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius); margin-bottom: 15px; font-size: 15px; outline: none; }
+        .badge { display: inline-block; padding: 4px 10px; font-size: 12px; border-radius: 20px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="window.location.href='index.html'">Hussain Sports 🏆</div>
+        <nav>
+            <button onclick="window.location.href='index.html'">Shop</button>
+            <button onclick="window.location.href='cart.html'">Cart</button>
+            <button onclick="window.location.href='track.html'" class="active">Track Order</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 style="margin-bottom: 15px;">Track Your Parcel Status</h2>
+        <p style="color: var(--text-muted); margin-bottom: 25px;">Enter your unique tracking number (e.g. HS-1234-PK) to check your current order progress.</p>
+        
+        <div style="background: var(--bg-card); padding: 30px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow);">
+            <label style="display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 500;">Tracking Number:</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="track-input" placeholder="e.g. HS-5482-PK" style="margin-bottom: 0; flex: 1;">
+                <button class="action-btn" style="width: 150px;" onclick="trackOrder()">Check Status</button>
+            </div>
+        </div>
+        
+        <div id="tracking-result" style="margin-top: 30px;"></div>
+    </div>
+
+    <script>
+        async function trackOrder() {
+            const trackingNum = document.getElementById('track-input').value.trim();
+            const resultDiv = document.getElementById('tracking-result');
+
+            if (!trackingNum) {
+                alert("Please enter a tracking number!");
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/track/${trackingNum}`);
+                const data = await res.json();
+
+                if (!data.success) {
+                    resultDiv.innerHTML = `<div style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); padding: 15px; border-radius: var(--radius); color: var(--danger);">${data.message}</div>`;
+                    return;
+                }
+
+                const found = data.order;
+                let statusColor = '#3b82f6';
+                if (found.status === 'Shipped') statusColor = '#f97316';
+                if (found.status === 'Delivered') statusColor = '#22c55e';
+                if (found.status === 'Cancelled') statusColor = '#ef4444';
+
+                let itemsList = found.items.map(i => `${i.name} (x${i.quantity || 1}) - PKR ${(i.price || 0) * (i.quantity || 1)}`).join('<br>');
+
+                resultDiv.innerHTML = `
+                    <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                            <span>Tracking ID: <strong>${found.trackingNumber}</strong></span>
+                            <span class="badge" style="background: ${statusColor}33; color: ${statusColor}; font-weight: bold; font-size:14px; padding:6px 12px;">${found.status || 'Pending'}</span>
+                        </div>
+                        <p style="margin: 6px 0; font-size: 14px;"><strong>Customer Name:</strong> ${found.customerName}</p>
+                        <p style="margin: 6px 0; font-size: 14px;"><strong>Mobile:</strong> ${found.mobile}</p>
+                        <p style="margin: 6px 0; font-size: 14px;"><strong>Payment Method:</strong> ${found.paymentMethod}</p>
+                        <p style="margin: 6px 0; font-size: 14px;"><strong>Ordered Items:</strong><br><span style="color: var(--text-muted);">${itemsList}</span></p>
+                        <p style="margin: 6px 0; font-size: 14px;"><strong>Shipping Address:</strong> ${found.address}</p>
+                        <p style="margin: 6px 0; font-size: 14px; color: var(--text-muted);"><strong>Order Date:</strong> ${found.date}</p>
+                    </div>
+                `;
+            } catch (err) {
+                console.error("Error tracking order:", err);
+                resultDiv.innerHTML = `<p style="color: var(--danger);">Error fetching tracking info.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
