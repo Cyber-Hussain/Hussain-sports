@@ -3,114 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hussain Sports 🏆 - Professional Sports Gear</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <title>Hussain Sports 🏆 - Official Sports Store</title>
     <style>
         :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f8fafc;
+            --primary-red: #e61919;
+            --primary-dark-red: #b30000;
+            --bg-dark: #0a0a0a;
+            --bg-card: #141414;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #ffffff;
             --text-muted: #94a3b8;
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --border: #334155;
-            --radius: 12px;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --border-color: #e2e8f0;
+            --radius: 8px;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
-        
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f1f5f9; color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- SPLASH / INTRO SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+            background: radial-gradient(circle at center, #1a0202 0%, #050000 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 9999; transition: opacity 0.6s ease; cursor: pointer;
-        }
-        .welcome-anim-box { text-align: center; animation: fadeInScale 1.2s ease-in-out infinite alternate; }
-        @keyframes fadeInScale {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            100% { transform: scale(1.05); opacity: 1; }
+            z-index: 9999; transition: opacity 0.6s ease;
         }
 
-        header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 24px; font-weight: 700; color: var(--accent); letter-spacing: 1px; cursor: pointer; user-select: none; }
-        nav button { background: transparent; border: none; color: var(--text-muted); font-size: 16px; font-weight: 600; margin-left: 20px; cursor: pointer; transition: color 0.3s; }
-        nav button:hover, nav button.active { color: var(--accent); }
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; }
+        .skip-btn {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(255, 255, 255, 0.1); color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3); padding: 8px 16px;
+            border-radius: 4px; font-size: 12px; font-weight: bold;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .skip-btn:hover { background: var(--primary-red); border-color: var(--primary-red); }
+
+        .splash-logo-box { text-align: center; cursor: pointer; }
+        .splash-logo-title {
+            font-size: 48px; font-weight: 900; color: #fff;
+            text-transform: uppercase; font-style: italic;
+            text-shadow: 0 0 20px rgba(230, 25, 25, 0.8), 2px 2px 0px var(--primary-red);
+            letter-spacing: 2px; line-height: 1.1;
+        }
+        .splash-logo-sub {
+            font-size: 54px; font-weight: 900; color: var(--primary-red);
+            text-transform: uppercase; font-style: italic;
+            text-shadow: 0 0 25px rgba(230, 25, 25, 1), 2px 2px 0px #fff;
+            letter-spacing: 3px;
+        }
+
+        .splash-character {
+            margin-top: 30px; font-size: 80px;
+            animation: bounceKick 1.2s infinite alternate ease-in-out;
+        }
+        @keyframes bounceKick {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-15px) rotate(-5deg); }
+        }
+
+        .top-notice-bar {
+            background: #000; color: #fff; text-align: center;
+            padding: 6px 10px; font-size: 12px; font-weight: bold;
+            letter-spacing: 1px; border-bottom: 1px solid #222;
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            background: #ffffff; border-bottom: 1px solid var(--border-color);
+            padding: 15px 40px; display: flex; justify-content: space-between;
+            align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .brand-logo { display: flex; flex-direction: column; cursor: pointer; user-select: none; }
+        .brand-logo-main {
+            font-size: 26px; font-weight: 900; color: #1e1e1e;
+            font-style: italic; letter-spacing: -0.5px; line-height: 1;
+        }
+        .brand-logo-main span { color: var(--primary-red); }
+        .brand-logo-tag { font-size: 9px; font-weight: 700; color: #666; letter-spacing: 1px; text-transform: uppercase; }
+
+        .header-search { display: flex; align-items: center; flex: 1; max-width: 500px; margin: 0 30px; }
+        .header-search input {
+            width: 100%; padding: 10px 15px; border: 1px solid #cbd5e1;
+            border-radius: 6px 0 0 6px; outline: none; font-size: 14px;
+        }
+        .header-search button {
+            background: var(--primary-red); color: #fff; border: none;
+            padding: 10px 20px; border-radius: 0 6px 6px 0; cursor: pointer;
+            font-weight: bold; transition: 0.3s;
+        }
+        .header-search button:hover { background: var(--primary-dark-red); }
+
+        nav button {
+            background: transparent; border: none; color: #333;
+            font-size: 14px; font-weight: 700; margin-left: 20px;
+            cursor: pointer; transition: color 0.3s;
+        }
+        nav button:hover, nav button.active { color: var(--primary-red); }
+
+        /* --- HERO BANNER SECTION --- */
+        .hero-banner {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1600') center/cover no-repeat;
+            color: white; padding: 70px 20px; text-align: center; position: relative;
+        }
+        .hero-title { font-size: 42px; font-weight: 900; font-style: italic; text-transform: uppercase; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); }
+        .hero-subtitle { font-size: 24px; color: #facc15; font-weight: 800; margin-top: 10px; text-transform: uppercase; text-shadow: 1px 1px 5px rgba(0,0,0,0.8); }
+
+        /* --- FEATURE CARDS --- */
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px; max-width: 1200px; margin: -30px auto 30px auto;
+            padding: 0 20px; position: relative; z-index: 10;
+        }
+        .feature-card {
+            background: #fff; padding: 15px 20px; border-radius: 8px;
+            display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
+        }
+        .feature-icon { font-size: 28px; color: var(--primary-red); }
+        .feature-text h4 { font-size: 14px; font-weight: 700; color: #1e293b; }
+        .feature-text p { font-size: 12px; color: #64748b; }
+
+        /* --- MAIN CONTAINER & PRODUCTS --- */
+        .container { max-width: 1200px; margin: 20px auto 40px auto; padding: 0 20px; flex: 1; width: 100%; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .controls-bar { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
-        .controls-bar input, .controls-bar select { padding: 12px 16px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius); font-size: 15px; outline: none; }
-        .controls-bar input { flex: 1; min-width: 250px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .product-card {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
+            overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .product-card img { width: 100%; height: 210px; object-fit: cover; background: #f8fafc; }
+        .product-info { padding: 15px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-title { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+        .product-price { font-size: 16px; color: var(--primary-red); font-weight: 800; margin-bottom: 12px; }
 
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform 0.3s; }
-        .product-card:hover { transform: translateY(-5px); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid var(--border); }
-        .product-info { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .product-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
-        .product-price { font-size: 16px; color: var(--success); font-weight: 700; margin-bottom: 15px; }
-        .badge { display: inline-block; padding: 4px 10px; font-size: 12px; border-radius: 20px; margin-bottom: 10px; }
-        .in-stock { background: rgba(34, 197, 94, 0.2); color: var(--success); }
-        .out-stock { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .action-btn {
+            background: var(--primary-red); color: white; border: none;
+            padding: 10px; border-radius: 6px; font-weight: 700;
+            cursor: pointer; transition: background 0.3s; width: 100%; text-align: center;
+        }
+        .action-btn:hover { background: var(--primary-dark-red); }
 
-        .action-btn { background: var(--accent); color: white; border: none; padding: 10px; border-radius: var(--radius); font-weight: 600; cursor: pointer; transition: background 0.3s; width: 100%; }
-        .action-btn:hover { background: var(--accent-hover); }
+        /* --- FLOATING WHATSAPP --- */
+        .whatsapp-float {
+            position: fixed; bottom: 25px; right: 25px; background: #25d366; color: white;
+            width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000; text-decoration: none; transition: transform 0.3s;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); }
 
-        #cart-items { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
-        form label { display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 500; }
-        form input, form select, form textarea { width: 100%; padding: 12px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius); margin-bottom: 15px; font-size: 15px; }
-
-        table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-top: 15px; }
-        th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
-        th { background: rgba(99, 102, 241, 0.1); color: var(--accent); }
+        /* TABLES & FORMS */
+        table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+        th { background: #f8fafc; color: #334155; font-weight: 700; }
+        form label { display: block; margin-bottom: 5px; color: #475569; font-weight: 600; font-size: 13px; }
+        form input, form select, form textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 12px; font-size: 14px; }
 
         @media (max-width: 768px) {
-            header { padding: 15px 20px; flex-direction: column; gap: 12px; }
-            nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
-            nav button { margin-left: 0 !important; font-size: 14px; }
-            .container { margin: 20px auto; padding: 0 10px; }
-            .controls-bar { flex-direction: column; }
-            .controls-bar input, .controls-bar select { width: 100%; }
+            header { padding: 12px 15px; flex-direction: column; gap: 10px; }
+            .header-search { margin: 10px 0; width: 100%; max-width: 100%; }
+            nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+            nav button { margin-left: 0; }
+            .hero-title { font-size: 28px; }
+            .hero-subtitle { font-size: 16px; }
             table { display: block; overflow-x: auto; white-space: nowrap; }
         }
     </style>
 </head>
 <body>
 
-    <div id="splash-screen" onclick="enterWebsite()">
-        <div class="welcome-anim-box">
-            <div style="font-size: 60px; margin-bottom: 15px;">🏆⚽</div>
-            <h1 style="color: var(--text-main); font-size: 32px; margin-bottom: 8px; letter-spacing: 1px;">Welcome to Hussain Sports</h1>
-            <p style="color: var(--accent); font-size: 16px; font-weight: 600; letter-spacing: 0.5px;">Click anywhere to enter store</p>
+    <!-- INTRO SPLASH SCREEN -->
+    <div id="splash-screen">
+        <button class="skip-btn" onclick="enterWebsite()">Skip Intro ↗</button>
+        <div class="splash-logo-box" onclick="enterWebsite()">
+            <div class="splash-logo-title">HUSSAIN</div>
+            <div class="splash-logo-sub">SPORTS ⚽</div>
         </div>
+        <div class="splash-character">🏃‍♂️⚽</div>
     </div>
 
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="top-notice-bar">
+        🏆 WELCOME TO HUSSAIN SPORTS! ⚽
+    </div>
+
+    <!-- HEADER -->
     <header>
-        <div class="logo" onclick="handleLogoClick()">Hussain Sports 🏆</div>
+        <div class="brand-logo" onclick="handleLogoClick()">
+            <div class="brand-logo-main">HUSSAIN <span>SPORTS ⚽</span></div>
+            <div class="brand-logo-tag">Champions Choose Quality</div>
+        </div>
+
+        <div class="header-search">
+            <input type="text" id="search-input" placeholder="Search sports gear, shoes or equipment..." oninput="filterProducts()">
+            <button onclick="filterProducts()">Search</button>
+        </div>
+
         <nav>
-            <button onclick="switchTab('shop')" class="active" id="nav-shop">Shop</button>
-            <button onclick="switchTab('track')" id="nav-track">Track Order</button>
-            <button onclick="switchTab('cart')" id="nav-cart">Cart (<span id="cart-count">0</span>)</button>
+            <button onclick="switchTab('shop')" class="active" id="nav-shop">🏠 Home</button>
+            <button onclick="switchTab('track')" id="nav-track">🚚 Track</button>
+            <button onclick="switchTab('cart')" id="nav-cart">🛒 Cart (<span id="cart-count">0</span>)</button>
         </nav>
     </header>
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+        <div class="hero-title">FIFA WORLD CUP 2026™</div>
+        <div class="hero-subtitle">ALL TYPES OF FOOTBALL T-SHIRTS & GEAR JUST A CLICK AWAY</div>
+    </div>
+
+    <!-- FEATURES LIST -->
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <div class="feature-text">
+                <h4>Fast Delivery</h4>
+                <p>Quick order dispatch</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <div class="feature-text">
+                <h4>Secure Shopping</h4>
+                <p>Safe & trusted checkout</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🏆</div>
+            <div class="feature-text">
+                <h4>Quality Products</h4>
+                <p>Carefully selected items</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📞</div>
+            <div class="feature-text">
+                <h4>Customer Support</h4>
+                <p>0301 4446096</p>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <!-- SHOP TAB -->
         <div id="shop" class="tab-content active">
-            <h2 style="margin-bottom: 25px;">Explore Professional Sports Gear</h2>
-            <div class="controls-bar">
-                <input type="text" id="search-input" placeholder="Search products..." oninput="filterProducts()">
-                <select id="filter-category" onchange="filterProducts()">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                <select id="filter-category" onchange="filterProducts()" style="padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1;">
                     <option value="All">All Categories</option>
                     <option value="Football">Football</option>
                     <option value="Cricket">Cricket</option>
                 </select>
-                <select id="filter-subcategory" onchange="filterProducts()">
+                <select id="filter-subcategory" onchange="filterProducts()" style="padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1;">
                     <option value="All">All Sub-Categories</option>
                     <option value="Balls">Balls</option>
                     <option value="Jerseys">Jerseys</option>
@@ -124,87 +274,68 @@
 
         <!-- TRACK ORDER TAB -->
         <div id="track" class="tab-content">
-            <h2 style="margin-bottom: 15px;">Track Your Parcel Status</h2>
-            <p style="color: var(--text-muted); margin-bottom: 25px;">Enter your unique tracking number (e.g. HS-1234-PK) to check your current order progress.</p>
-            <div style="background: var(--bg-card); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); max-width: 600px;">
+            <h2>Track Your Order</h2>
+            <div style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; max-width: 500px; margin-top: 15px;">
                 <label>Tracking Number:</label>
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="track-input" placeholder="e.g. HS-5482-PK" style="margin-bottom: 0;">
-                    <button class="action-btn" style="width: 150px;" onclick="trackOrder()">Check Status</button>
+                    <input type="text" id="track-input" placeholder="e.g. HS-5482-PK">
+                    <button class="action-btn" style="width: 120px;" onclick="trackOrder()">Track</button>
                 </div>
             </div>
-            <div id="tracking-result" style="margin-top: 30px; max-width: 600px;"></div>
+            <div id="tracking-result" style="margin-top: 20px;"></div>
         </div>
 
         <!-- CART TAB -->
         <div id="cart" class="tab-content">
-            <h2 style="margin-bottom: 25px;">Your Shopping Cart</h2>
-            <div id="cart-items"><p style="color: var(--text-muted);">Your cart is empty.</p></div>
+            <h2>Shopping Cart</h2>
+            <div id="cart-items" style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 15px;"></div>
             
-            <div id="checkout-section" style="display: none; margin-top: 35px;">
-                <h3 style="border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px;">Checkout Details</h3>
+            <div id="checkout-section" style="display: none; margin-top: 25px; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h3>Checkout Details</h3>
                 <form id="order-form" onsubmit="placeOrder(event)">
                     <label>Full Name:</label>
-                    <input type="text" id="cust-name" required placeholder="e.g. Muhammad Hussain">
+                    <input type="text" id="cust-name" required>
                     <label>Email Address:</label>
-                    <input type="email" id="cust-email" required placeholder="e.g. hussain@example.com">
+                    <input type="email" id="cust-email" required>
                     <label>Mobile Number:</label>
-                    <input type="text" id="cust-mobile" required placeholder="0301234567">
+                    <input type="text" id="cust-mobile" required>
                     <label>Payment Method:</label>
                     <select id="cust-payment" required onchange="togglePaymentFields()">
                         <option value="COD">Cash on Delivery (COD)</option>
-                        <option value="Advance">Advance Payment (JazzCash / Bank Transfer)</option>
+                        <option value="Advance">Advance Payment (JazzCash / EasyPaisa / Bank)</option>
                     </select>
-                    <div id="advance-payment-info" style="display: none; background: rgba(99, 102, 241, 0.1); padding: 20px; border-radius: var(--radius); border: 1px solid var(--accent); margin-bottom: 20px;">
-                        <p style="font-size: 15px; margin-bottom: 10px; color: var(--accent); font-weight: 600;">💳 Step 1: Send Payment Online</p>
-                        <p style="font-size: 14px; color: var(--text-main); margin-bottom: 5px;">Account Title: <strong>Mohammad Hussain</strong></p>
-                        <p style="font-size: 14px; color: var(--text-main); margin-bottom: 15px;">JazzCash / EasyPaisa / Bank: <strong>03014446096</strong></p>
-                        
-                        <label style="color: var(--accent); font-size: 13px; margin-bottom: 4px; display: block;">Upload Payment Screenshot / Receipt:</label>
-                        <input type="file" id="payment-screenshot" accept="image/*" style="background: var(--bg-main); padding: 8px; font-size: 13px; margin-bottom: 0; width: 100%;">
+                    <div id="advance-payment-info" style="display: none; background: #fff1f1; padding: 15px; border-radius: 6px; border: 1px solid var(--primary-red); margin-bottom: 12px;">
+                        <p style="font-weight: bold; color: var(--primary-red);">💳 Send Payment Online:</p>
+                        <p>Account Title: <strong>Mohammad Hussain</strong></p>
+                        <p>JazzCash / EasyPaisa / Bank: <strong>03014446096</strong></p>
+                        <label style="margin-top: 8px;">Upload Payment Screenshot:</label>
+                        <input type="file" id="payment-screenshot" accept="image/*">
                     </div>
-                    <label>Complete Shipping Address:</label>
-                    <textarea id="cust-address" rows="3" required placeholder="House #, Street, City"></textarea>
-                    <button type="submit" class="action-btn" style="padding: 14px; font-size: 16px; margin-top: 10px;">Confirm & Place Order</button>
-                    <button type="button" class="action-btn" style="padding: 14px; font-size: 16px; margin-top: 10px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);" onclick="orderViaWhatsApp()">📱 Order via WhatsApp</button>
+                    <label>Shipping Address:</label>
+                    <textarea id="cust-address" rows="3" required></textarea>
+                    <button type="submit" class="action-btn" style="margin-top: 10px;">Confirm & Place Order</button>
                 </form>
             </div>
         </div>
 
-        <!-- ADMIN PANEL TAB -->
+        <!-- ADMIN TAB -->
         <div id="admin" class="tab-content">
-            <h2 style="margin-bottom: 30px; color: var(--accent);">🔐 Admin Panel - Store Management</h2>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 35px;">
-                <div style="background: var(--bg-card); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow);">
-                    <p style="color: var(--text-muted); margin: 0; font-size: 14px;">Total Sales Value</p>
-                    <h3 id="stat-sales" style="color: var(--success); margin: 8px 0 0 0; font-size: 24px;">PKR 0</h3>
-                </div>
-                <div style="background: var(--bg-card); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow);">
-                    <p style="color: var(--text-muted); margin: 0; font-size: 14px;">Total Orders Received</p>
-                    <h3 id="stat-orders" style="color: #3b82f6; margin: 8px 0 0 0; font-size: 24px;">0</h3>
-                </div>
-                <div style="background: var(--bg-card); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow);">
-                    <p style="color: var(--text-muted); margin: 0; font-size: 14px;">Top Selling Product</p>
-                    <h3 id="stat-top-product" style="color: #f97316; margin: 8px 0 0 0; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">N/A</h3>
-                </div>
-            </div>
-
-            <h3 style="color: #6366f1; border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 20px;">📦 Customer Orders Received</h3>
+            <h2>Admin Dashboard</h2>
+            <h3 style="margin-top: 20px;">Received Orders</h3>
             <table id="admin-orders-table">
-                <tr><th>ID / Tracking</th><th>Customer Info</th><th>Payment</th><th>Items</th><th>Address</th><th>Status & Action</th><th>Date</th></tr>
+                <tr><th>ID / Tracking</th><th>Customer</th><th>Payment</th><th>Items</th><th>Address</th><th>Status</th><th>Date</th></tr>
             </table>
 
-            <h3 style="border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-top: 45px; margin-bottom: 20px;">Add New Product</h3>
-            <form onsubmit="addProduct(event)" style="margin-bottom: 40px; background: var(--bg-card); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border);">
+            <h3 style="margin-top: 30px;">Add Product</h3>
+            <form onsubmit="addProduct(event)" style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 10px;">
                 <label>Product Name:</label>
                 <input type="text" id="new-name" required>
                 <label>Price (PKR):</label>
                 <input type="number" id="new-price" required>
-                <label>Stock Quantity:</label>
-                <input type="number" id="new-stock" required placeholder="e.g. 15" min="0">
+                <label>Stock:</label>
+                <input type="number" id="new-stock" required>
                 <label>Category:</label>
-                <select id="new-cat" required onchange="updatesubCategoryOptions()">
+                <select id="new-cat" required>
                     <option value="Football">Football</option>
                     <option value="Cricket">Cricket</option>
                 </select>
@@ -216,71 +347,53 @@
                     <option value="Grippers">Grippers</option>
                     <option value="Accessories">Accessories</option>
                 </select>
-                <label>Upload Image:</label>
+                <label>Product Image:</label>
                 <input type="file" id="new-image" accept="image/*">
-                <button type="submit" class="action-btn" style="margin-top: 10px;">Save Product</button>
+                <button type="submit" class="action-btn">Save Product</button>
             </form>
 
-            <h3 style="border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 20px;">Manage Existing Products</h3>
+            <h3 style="margin-top: 30px;">Manage Products</h3>
             <table id="admin-product-table">
-                <tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock Status</th><th>Action</th></tr>
+                <tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr>
             </table>
         </div>
     </div>
 
-    <!-- Printable Invoice Template -->
-    <div id="invoice-template" style="display: none; padding: 30px; background: #ffffff; color: #000000; font-family: Arial, sans-serif;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #6366f1; padding-bottom: 15px; margin-bottom: 20px;">
-            <div>
-                <h1 style="color: #6366f1; margin: 0; font-size: 24px;">Hussain Sports 🏆</h1>
-                <p style="margin: 5px 0 0 0; color: #555; font-size: 12px;">Official Order Receipt & Tax Invoice</p>
-            </div>
+    <!-- PRINTABLE INVOICE TEMPLATE -->
+    <div id="invoice-template" style="display: none; padding: 30px; background: #fff; color: #000;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary-red); padding-bottom: 10px;">
+            <h2>Hussain Sports 🏆</h2>
             <div style="text-align: right;">
-                <h3 style="margin: 0; color: #333;" id="inv-order-id">Order #000</h3>
-                <p style="margin: 5px 0 0 0; color: #6366f1; font-weight: bold; font-size: 13px;" id="inv-tracking">Tracking: HS-0000-PK</p>
-                <p style="margin: 3px 0 0 0; color: #777; font-size: 11px;" id="inv-date">Date: DD/MM/YYYY</p>
+                <h3 id="inv-order-id">Order #000</h3>
+                <p id="inv-tracking" style="color: var(--primary-red); font-weight: bold;"></p>
+                <p id="inv-date" style="font-size: 12px; color: #666;"></p>
             </div>
         </div>
-
-        <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
-            <div>
-                <h4 style="margin: 0 0 5px 0; color: #333;">Customer Info:</h4>
-                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-name">Name: -</p>
-                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-mobile">Mobile: -</p>
-                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-email">Email: -</p>
-            </div>
-            <div style="text-align: right;">
-                <h4 style="margin: 0 0 5px 0; color: #333;">Delivery Address & Payment:</h4>
-                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-address">Address: -</p>
-                <p style="margin: 2px 0; font-size: 13px;" id="inv-cust-payment">Payment: COD</p>
-            </div>
+        <div style="margin: 15px 0;">
+            <p id="inv-cust-name"></p>
+            <p id="inv-cust-mobile"></p>
+            <p id="inv-cust-email"></p>
+            <p id="inv-cust-address"></p>
+            <p id="inv-cust-payment"></p>
         </div>
-
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; color: #000;" id="inv-items-table">
+        <table style="width: 100%; border-collapse: collapse;" id="inv-items-table">
             <thead>
-                <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
-                    <th style="padding: 10px; text-align: left; font-size: 13px;">Item Description</th>
-                    <th style="padding: 10px; text-align: center; font-size: 13px;">Qty</th>
-                    <th style="padding: 10px; text-align: right; font-size: 13px;">Unit Price</th>
-                    <th style="padding: 10px; text-align: right; font-size: 13px;">Total</th>
+                <tr style="background: #f1f5f9;">
+                    <th style="padding: 8px;">Item</th>
+                    <th style="padding: 8px; text-align: center;">Qty</th>
+                    <th style="padding: 8px; text-align: right;">Price</th>
+                    <th style="padding: 8px; text-align: right;">Total</th>
                 </tr>
             </thead>
             <tbody id="inv-items-body"></tbody>
         </table>
-
-        <div style="text-align: right; border-top: 2px solid #cbd5e1; padding-top: 10px;">
-            <h3 style="margin: 0; color: #16a34a;" id="inv-grand-total">Grand Total: PKR 0</h3>
-        </div>
-
-        <div style="margin-top: 40px; text-align: center; border-top: 1px dashed #ccc; padding-top: 15px; font-size: 11px; color: #777;">
-            Thank you for shopping with Hussain Sports! For support, contact us on WhatsApp: +923014446096
-        </div>
+        <h3 id="inv-grand-total" style="text-align: right; margin-top: 15px; color: var(--primary-red);"></h3>
     </div>
 
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/923014446096" target="_blank" class="whatsapp-float">💬</a>
+
     <script>
-        let currentPage = 1;
-        const productsPerPage = 20;
-        let filteredProductsList = [];
         let allProducts = [];
         let cart = JSON.parse(localStorage.getItem('hussain_cart')) || [];
         let logoClickCount = 0;
@@ -326,28 +439,6 @@
             }
         }
 
-        function updatesubCategoryOptions() {
-            const cat = document.getElementById('new-cat').value;
-            const subcat = document.getElementById('new-subcat');
-            subcat.innerHTML = '';
-            
-            if (cat === 'Football') {
-                subcat.innerHTML = `
-                    <option value="Balls">Balls</option>
-                    <option value="Jerseys">Jerseys</option>
-                    <option value="Cleats">Cleats</option>
-                    <option value="Grippers">Grippers</option>
-                    <option value="Accessories">Accessories</option>
-                `;
-            } else if (cat === 'Cricket') {
-                subcat.innerHTML = `
-                    <option value="Balls">Balls</option>
-                    <option value="Jerseys">Jerseys</option>
-                    <option value="Accessories">Accessories</option>
-                `;
-            }
-        }
-
         async function fetchProducts() {
             try {
                 const res = await fetch('/api/products');
@@ -359,22 +450,15 @@
         }
 
         function displayProducts(products) {
-            filteredProductsList = products;
-            const startIndex = (currentPage - 1) * productsPerPage;
-            const endIndex = startIndex + productsPerPage;
-            const paginatedItems = products.slice(startIndex, endIndex);
-
             const list = document.getElementById('product-list');
             list.innerHTML = '';
-            
-            if (paginatedItems.length === 0) {
-                list.innerHTML = `<p style="color: var(--text-muted);">No products found.</p>`;
-                const paginationDiv = document.getElementById('pagination-controls');
-                if (paginationDiv) paginationDiv.innerHTML = '';
+
+            if (products.length === 0) {
+                list.innerHTML = `<p style="color: #64748b;">No products found.</p>`;
                 return;
             }
 
-            paginatedItems.forEach(p => {
+            products.forEach(p => {
                 let stockQty = p.stock !== undefined ? p.stock : 10;
                 let available = p.inStock && stockQty > 0;
                 list.innerHTML += `
@@ -382,53 +466,17 @@
                         <img src="${p.image}" alt="${p.name}">
                         <div class="product-info">
                             <div>
-                                <span class="badge ${available ? 'in-stock' : 'out-stock'}">${available ? `In Stock (${stockQty})` : 'Out of Stock'}</span>
                                 <div class="product-title">${p.name}</div>
                                 <div class="product-price">PKR ${p.price}</div>
                             </div>
-                            <button class="action-btn" onclick="addToCart(${p.id})" ${!available ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>Add to Cart</button>
+                            <button class="action-btn" onclick="addToCart(${p.id})" ${!available ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>${available ? 'Add to Cart' : 'Out of Stock'}</button>
                         </div>
                     </div>
                 `;
             });
-
-            renderPaginationControls(products.length);
-        }
-
-        function renderPaginationControls(totalItems) {
-            const totalPages = Math.ceil(totalItems / productsPerPage);
-            let paginationDiv = document.getElementById('pagination-controls');
-            
-            if (!paginationDiv) {
-                paginationDiv = document.createElement('div');
-                paginationDiv.id = 'pagination-controls';
-                paginationDiv.style.cssText = "display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 35px;";
-                document.getElementById('shop').appendChild(paginationDiv);
-            }
-
-            if (totalPages <= 1) {
-                paginationDiv.innerHTML = '';
-                return;
-            }
-
-            paginationDiv.innerHTML = `
-                <button class="action-btn" style="width: 100px; ${currentPage === 1 ? 'opacity: 0.5; cursor: not-allowed;' : ''}" onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
-                <span style="font-weight: 600; color: var(--text-muted);">Page ${currentPage} of ${totalPages}</span>
-                <button class="action-btn" style="width: 100px; ${currentPage === totalPages ? 'opacity: 0.5; cursor: not-allowed;' : ''}" onclick="changePage(1)" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
-            `;
-        }
-
-        function changePage(direction) {
-            const totalPages = Math.ceil(filteredProductsList.length / productsPerPage);
-            currentPage += direction;
-            if (currentPage < 1) currentPage = 1;
-            if (currentPage > totalPages) currentPage = totalPages;
-            displayProducts(filteredProductsList);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function filterProducts() {
-            currentPage = 1;
             const query = document.getElementById('search-input').value.toLowerCase();
             const cat = document.getElementById('filter-category').value;
             const subcat = document.getElementById('filter-subcategory').value;
@@ -444,16 +492,10 @@
 
         function addToCart(id) {
             const product = allProducts.find(p => p.id === id);
-            let stockQty = product.stock !== undefined ? product.stock : 10;
-            if (product && product.inStock && stockQty > 0) {
-                const existingItem = cart.find(item => item.id === id);
-                if (existingItem) {
-                    if (existingItem.quantity < stockQty) {
-                        existingItem.quantity += 1;
-                    } else {
-                        alert("Cannot add more than available stock!");
-                        return;
-                    }
+            if (product) {
+                const existing = cart.find(i => i.id === id);
+                if (existing) {
+                    existing.quantity += 1;
                 } else {
                     cart.push({ ...product, quantity: 1 });
                 }
@@ -463,52 +505,38 @@
         }
 
         function updateCartUI() {
-            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('cart-count').innerText = totalCount;
-            
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').innerText = count;
+
             const container = document.getElementById('cart-items');
             const checkoutSec = document.getElementById('checkout-section');
 
             if (cart.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-muted);">Your cart is empty.</p>`;
+                container.innerHTML = `<p style="color: #64748b;">Your cart is empty.</p>`;
                 checkoutSec.style.display = 'none';
                 localStorage.removeItem('hussain_cart');
                 return;
             }
 
             container.innerHTML = '';
-            let grandTotal = 0;
-
+            let total = 0;
             cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                grandTotal += itemTotal;
-
+                let subTotal = item.price * item.quantity;
+                total += subTotal;
                 container.innerHTML += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding: 10px 0;">
+                        <div><strong>${item.name}</strong><br><span style="color: #64748b; font-size: 12px;">PKR ${item.price} x ${item.quantity}</span></div>
                         <div>
-                            <strong>${item.name}</strong><br>
-                            <span style="color: var(--text-muted); font-size: 13px;">PKR ${item.price} each</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <button style="background: var(--border); color: white; border: none; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-weight: bold;" onclick="changeQuantity(${index}, -1)">-</button>
-                            <span style="font-weight: 600; min-width: 20px; text-align: center;">${item.quantity}</span>
-                            <button style="background: var(--border); color: white; border: none; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-weight: bold;" onclick="changeQuantity(${index}, 1)">+</button>
-                            <span style="margin-left: 15px; font-weight: 600; color: var(--success);">PKR ${itemTotal}</span>
-                            <button style="background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; margin-left: 10px;" onclick="removeFromCart(${index})">Remove</button>
+                            <span style="font-weight: bold; color: var(--primary-red); margin-right: 10px;">PKR ${subTotal}</span>
+                            <button onclick="removeFromCart(${index})" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">X</button>
                         </div>
                     </div>
                 `;
             });
 
-            container.innerHTML += `<div style="margin-top: 15px; font-size: 18px; font-weight: 700; text-align: right; color: var(--success);">Grand Total: PKR ${grandTotal}</div>`;
+            container.innerHTML += `<h3 style="text-align: right; margin-top: 15px; color: var(--primary-red);">Total: PKR ${total}</h3>`;
             checkoutSec.style.display = 'block';
             localStorage.setItem('hussain_cart', JSON.stringify(cart));
-        }
-
-        function changeQuantity(index, delta) {
-            cart[index].quantity += delta;
-            if (cart[index].quantity <= 0) cart.splice(index, 1);
-            updateCartUI();
         }
 
         function removeFromCart(index) {
@@ -517,133 +545,119 @@
         }
 
         function togglePaymentFields() {
-            const paymentMethod = document.getElementById('cust-payment').value;
-            document.getElementById('advance-payment-info').style.display = (paymentMethod === 'Advance') ? 'block' : 'none';
+            const method = document.getElementById('cust-payment').value;
+            document.getElementById('advance-payment-info').style.display = (method === 'Advance') ? 'block' : 'none';
         }
 
         async function placeOrder(e) {
             e.preventDefault();
-            const customerName = document.getElementById('cust-name').value.trim();
-            const email = document.getElementById('cust-email').value.trim();
-            const mobile = document.getElementById('cust-mobile').value.trim();
-            const paymentMethod = document.getElementById('cust-payment').value;
-            const address = document.getElementById('cust-address').value.trim();
-
-            if (cart.length === 0) {
-                alert("Your cart is empty!");
-                return;
-            }
-
             const formData = new FormData();
-            formData.append('customerName', customerName);
-            formData.append('email', email);
-            formData.append('mobile', mobile);
-            formData.append('paymentMethod', paymentMethod);
-            formData.append('address', address);
+            formData.append('customerName', document.getElementById('cust-name').value);
+            formData.append('email', document.getElementById('cust-email').value);
+            formData.append('mobile', document.getElementById('cust-mobile').value);
+            formData.append('paymentMethod', document.getElementById('cust-payment').value);
+            formData.append('address', document.getElementById('cust-address').value);
             formData.append('items', JSON.stringify(cart));
             formData.append('date', new Date().toLocaleString());
 
-            if (paymentMethod === 'Advance') {
-                const screenshotFile = document.getElementById('payment-screenshot').files[0];
-                if (screenshotFile) {
-                    formData.append('paymentScreenshot', screenshotFile);
-                }
+            if (document.getElementById('cust-payment').value === 'Advance') {
+                const file = document.getElementById('payment-screenshot').files[0];
+                if (file) formData.append('paymentScreenshot', file);
             }
 
             try {
-                const res = await fetch('/api/orders', {
-                    method: 'POST',
-                    body: formData
-                });
+                const res = await fetch('/api/orders', { method: 'POST', body: formData });
                 const data = await res.json();
-                
-                const orderPayload = {
-                    customerName, email, mobile, paymentMethod, address,
-                    items: cart,
-                    date: new Date().toLocaleString(),
-                    trackingNumber: data.trackingNumber
-                };
-
                 alert(data.message);
-                if (confirm("Would you like to download your Official Order Receipt & Tracking PDF?")) {
-                    downloadReceiptPDF(orderPayload);
-                }
-
+                
                 cart = [];
                 localStorage.removeItem('hussain_cart');
                 updateCartUI();
                 document.getElementById('order-form').reset();
-                document.getElementById('advance-payment-info').style.display = 'none';
                 switchTab('shop');
                 fetchProducts();
             } catch (err) {
                 console.error("Error placing order:", err);
-                alert("Failed to place order.");
             }
         }
 
         async function trackOrder() {
-            const trackingNum = document.getElementById('track-input').value.trim();
-            const resultDiv = document.getElementById('tracking-result');
-
-            if (!trackingNum) {
-                alert("Please enter a tracking number!");
-                return;
-            }
-
+            const num = document.getElementById('track-input').value.trim();
+            if (!num) return;
             try {
-                const res = await fetch(`/api/track/${trackingNum}`);
+                const res = await fetch(`/api/track/${num}`);
                 const data = await res.json();
-
-                if (!data.success) {
-                    resultDiv.innerHTML = `<div style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); padding: 15px; border-radius: var(--radius); color: var(--danger);">${data.message}</div>`;
-                    return;
+                const resDiv = document.getElementById('tracking-result');
+                if (data.success) {
+                    resDiv.innerHTML = `<div style="background:#fff; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <p><strong>Tracking ID:</strong> ${data.order.trackingNumber}</p>
+                        <p><strong>Status:</strong> ${data.order.status}</p>
+                        <p><strong>Customer:</strong> ${data.order.customerName}</p>
+                    </div>`;
+                } else {
+                    resDiv.innerHTML = `<p style="color:red;">${data.message}</p>`;
                 }
-
-                const found = data.order;
-                let statusColor = '#3b82f6';
-                if (found.status === 'Shipped') statusColor = '#f97316';
-                if (found.status === 'Delivered') statusColor = '#22c55e';
-                if (found.status === 'Cancelled') statusColor = '#ef4444';
-
-                resultDiv.innerHTML = `
-                    <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-                            <span>Tracking ID: <strong>${found.trackingNumber}</strong></span>
-                            <span class="badge" style="background: ${statusColor}33; color: ${statusColor}; font-weight: bold;">${found.status || 'Pending'}</span>
-                        </div>
-                        <p style="margin: 4px 0; font-size: 14px;"><strong>Customer:</strong> ${found.customerName}</p>
-                        <p style="margin: 4px 0; font-size: 14px;"><strong>Payment:</strong> ${found.paymentMethod}</p>
-                        <p style="margin: 4px 0; font-size: 14px;"><strong>Address:</strong> ${found.address}</p>
-                        <p style="margin: 4px 0; font-size: 14px; color: var(--text-muted);"><strong>Date:</strong> ${found.date}</p>
-                    </div>
-                `;
             } catch (err) {
-                console.error("Error tracking order:", err);
-                resultDiv.innerHTML = `<p style="color: var(--danger);">Error fetching tracking info.</p>`;
+                console.error(err);
             }
         }
 
-        function orderViaWhatsApp() {
-            const customerName = document.getElementById('cust-name').value.trim();
-            const mobile = document.getElementById('cust-mobile').value.trim();
-            const address = document.getElementById('cust-address').value.trim();
-
-            if (!customerName || !mobile || !address) {
-                alert("Please fill in required fields!");
-                return;
+        async function loadAdminProducts() {
+            try {
+                const res = await fetch('/api/products');
+                const products = await res.json();
+                const table = document.getElementById('admin-product-table');
+                table.innerHTML = `<tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr>`;
+                products.forEach(p => {
+                    table.innerHTML += `
+                        <tr>
+                            <td>#${p.id}</td>
+                            <td><img src="${p.image}" width="35" height="35" style="object-fit:cover;"></td>
+                            <td>${p.name}</td>
+                            <td>${p.category}</td>
+                            <td>PKR ${p.price}</td>
+                            <td>${p.stock}</td>
+                            <td><button onclick="deleteProduct(${p.id})" style="background:#ef4444; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Delete</button></td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error(err);
             }
+        }
 
-            let itemsText = "";
-            let grandTotal = 0;
-            cart.forEach((item) => {
-                const subTotal = item.price * item.quantity;
-                itemsText += `\n- ${item.name} x ${item.quantity} (PKR ${subTotal})`;
-                grandTotal += subTotal;
-            });
+        async function loadAdminOrders() {
+            try {
+                const res = await fetch('/api/admin/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: adminPassToken })
+                });
+                const data = await res.json();
+                if (!data.success) return;
 
-            const encodedMessage = encodeURIComponent(`New Order - Hussain Sports 🏆\nName: ${customerName}\nMobile: ${mobile}\nAddress: ${address}\nItems:${itemsText}\nGrand Total: PKR ${grandTotal}`);
-            window.open(`https://wa.me/923014446096?text=${encodedMessage}`, '_blank');
+                const table = document.getElementById('admin-orders-table');
+                table.innerHTML = `<tr><th>ID / Tracking</th><th>Customer</th><th>Payment</th><th>Items</th><th>Address</th><th>Status</th><th>Date</th></tr>`;
+                
+                data.orders.forEach(o => {
+                    let itemsList = o.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
+                    let screenshotLink = o.paymentScreenshot ? `<br><a href="${o.paymentScreenshot}" target="_blank" style="color:var(--primary-red); font-weight:bold;">📷 Receipt</a>` : '';
+
+                    table.innerHTML += `
+                        <tr>
+                            <td>#${o.id}<br><small>${o.trackingNumber}</small></td>
+                            <td>${o.customerName}<br><small>${o.mobile}</small></td>
+                            <td>${o.paymentMethod}${screenshotLink}</td>
+                            <td>${itemsList}</td>
+                            <td>${o.address}</td>
+                            <td>${o.status}</td>
+                            <td>${o.date}</td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error(err);
+            }
         }
 
         async function addProduct(e) {
@@ -659,163 +673,21 @@
             if (imgFile) formData.append('productImage', imgFile);
 
             try {
-                const res = await fetch('/api/admin/products/add', {
-                    method: 'POST',
-                    body: formData
-                });
+                const res = await fetch('/api/admin/products/add', { method: 'POST', body: formData });
                 const data = await res.json();
                 alert(data.message);
                 e.target.reset();
-                updatesubCategoryOptions();
                 fetchProducts();
                 loadAdminProducts();
             } catch (err) {
-                console.error("Error adding product:", err);
-            }
-        }
-
-        async function loadAdminProducts() {
-            try {
-                const res = await fetch('/api/products');
-                const products = await res.json();
-                const table = document.getElementById('admin-product-table');
-                table.innerHTML = `<tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock Management</th><th>Action</th></tr>`;
-                
-                products.forEach(p => {
-                    let stockCount = p.stock !== undefined ? p.stock : 10;
-                    let stockWarning = (stockCount <= 5 && p.inStock) ? ` <span style="color: #ef4444; font-weight: bold; font-size: 11px;">⚠️ Low Stock (${stockCount})</span>` : '';
-
-                    table.innerHTML += `
-                        <tr>
-                            <td>#${p.id}</td>
-                            <td><img src="${p.image}" width="40" height="40" style="object-fit:cover; border-radius:4px;"></td>
-                            <td>${p.name}${stockWarning}</td>
-                            <td>${p.category} / ${p.subCategory}</td>
-                            <td>PKR ${p.price}</td>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <button style="background: var(--border); color: white; border: none; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="updateStockDirect(${p.id}, -1)">-</button>
-                                    <span style="font-weight: 600; min-width: 30px; text-align: center;">${stockCount}</span>
-                                    <button style="background: var(--border); color: white; border: none; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="updateStockDirect(${p.id}, 1)">+</button>
-                                    <button style="background: var(--accent); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-left: 5px;" onclick="updateStockDirect(${p.id}, 10)">+10 Restock</button>
-                                </div>
-                            </td>
-                            <td>
-                                <button class="action-btn" style="padding: 5px 10px; font-size: 12px; background:#64748b;" onclick="deleteProduct(${p.id})">Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            } catch (err) {
-                console.error("Error loading admin products:", err);
-            }
-        }
-
-        async function updateStockDirect(productId, changeAmount) {
-            try {
-                const res = await fetch('/api/admin/products/stock', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: adminPassToken, productId, change: changeAmount })
-                });
-                const data = await res.json();
-                if(data.success) {
-                    loadAdminProducts();
-                    fetchProducts();
-                } else {
-                    alert(data.message);
-                }
-            } catch (err) {
-                console.error("Error updating stock:", err);
-            }
-        }
-
-        async function loadAdminOrders() {
-            try {
-                const res = await fetch('/api/admin/orders', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: adminPassToken })
-                });
-                const data = await res.json();
-                
-                if(!data.success) {
-                    alert("Unauthorized access!");
-                    switchTab('shop');
-                    return;
-                }
-
-                const orders = data.orders;
-                const stats = data.stats;
-
-                document.getElementById('stat-sales').innerText = `PKR ${stats.totalSales}`;
-                document.getElementById('stat-orders').innerText = stats.totalOrders;
-                document.getElementById('stat-top-product').innerText = stats.topProduct;
-
-                const table = document.getElementById('admin-orders-table');
-                table.innerHTML = `<tr><th>ID / Tracking</th><th>Customer Info</th><th>Payment</th><th>Items</th><th>Address</th><th>Status & Action</th><th>Date</th></tr>`;
-                
-                if(orders.length === 0) {
-                    table.innerHTML += `<tr><td colspan="7" style="text-align:center; color: var(--text-muted);">No orders received yet.</td></tr>`;
-                    return;
-                }
-
-                orders.forEach(o => {
-                    let itemsList = o.items.map(i => `${i.name} (x${i.quantity || 1}) - PKR ${(i.price || 0) * (i.quantity || 1)}`).join('<br>');
-                    let currentStatus = o.status || 'Pending';
-                    let trackingCode = o.trackingNumber || 'N/A';
-                    
-                    let screenshotHtml = '';
-                    if (o.paymentScreenshot) {
-                        screenshotHtml = `<br><a href="${o.paymentScreenshot}" target="_blank" style="color: var(--accent); font-weight: bold; font-size: 12px; text-decoration: underline;">📷 View Payment Receipt</a>`;
-                    }
-
-                    table.innerHTML += `
-                        <tr>
-                            <td>#${o.id}<br><span style="color:var(--accent); font-size:11px; font-weight:bold;">${trackingCode}</span></td>
-                            <td><strong>${o.customerName}</strong><br><span style="color:var(--text-muted);">${o.email}</span><br>📞 ${o.mobile}</td>
-                            <td><span class="badge ${o.paymentMethod === 'COD' ? 'in-stock' : 'out-stock'}">${o.paymentMethod}</span>${screenshotHtml}</td>
-                            <td>${itemsList}</td>
-                            <td>${o.address}</td>
-                            <td>
-                                <select id="status-${o.id}" style="margin-bottom: 6px; padding: 6px; font-size: 12px; background: #0f172a; color: #fff; border: 1px solid var(--border); border-radius: 4px;">
-                                    <option value="Pending" ${currentStatus === 'Pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="Shipped" ${currentStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
-                                    <option value="Delivered" ${currentStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
-                                    <option value="Cancelled" ${currentStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-                                </select>
-                                <button class="action-btn" style="padding: 5px 10px; font-size: 11px; margin-bottom: 4px;" onclick="updateOrderStatus(${o.id})">Update</button>
-                                <button class="action-btn" style="padding: 5px 10px; font-size: 11px; background: #0284c7;" onclick='downloadReceiptPDF(${JSON.stringify(o).replace(/'/g, "&apos;")})'>📄 Invoice PDF</button>
-                            </td>
-                            <td>${o.date}</td>
-                        </tr>
-                    `;
-                });
-            } catch (err) {
-                console.error("Error loading orders:", err);
-            }
-        }
-
-        async function updateOrderStatus(orderId) {
-            const newStatus = document.getElementById(`status-${orderId}`).value;
-            try {
-                const res = await fetch('/api/admin/orders/status', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: adminPassToken, orderId, status: newStatus })
-                });
-                const data = await res.json();
-                alert(data.message);
-                loadAdminOrders();
-            } catch (err) {
-                console.error("Error updating order status:", err);
+                console.error(err);
             }
         }
 
         async function deleteProduct(id) {
-            if (!confirm("Are you sure you want to delete this product?")) return;
+            if (!confirm("Delete product?")) return;
             try {
-                await fetch('/api/admin/products/delete', { 
+                await fetch('/api/admin/products/delete', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ token: adminPassToken, productId: id })
@@ -823,55 +695,9 @@
                 loadAdminProducts();
                 fetchProducts();
             } catch (err) {
-                console.error("Error deleting product:", err);
+                console.error(err);
             }
         }
-
-        function downloadReceiptPDF(orderData) {
-    document.getElementById('inv-order-id').innerText = `Order #${orderData.id || 'NEW'}`;
-    document.getElementById('inv-tracking').innerText = `Tracking: ${orderData.trackingNumber || 'HS-PENDING'}`;
-    document.getElementById('inv-date').innerText = `Date: ${orderData.date || new Date().toLocaleString()}`;
-    document.getElementById('inv-cust-name').innerText = `Name: ${orderData.customerName}`;
-    document.getElementById('inv-cust-mobile').innerText = `Mobile: ${orderData.mobile}`;
-    document.getElementById('inv-cust-email').innerText = `Email: ${orderData.email || 'N/A'}`;
-    document.getElementById('inv-cust-address').innerText = `Address: ${orderData.address}`;
-    document.getElementById('inv-cust-payment').innerText = `Payment: ${orderData.paymentMethod}`;
-
-    const tbody = document.getElementById('inv-items-body');
-    tbody.innerHTML = '';
-    let grandTotal = 0;
-
-    orderData.items.forEach(item => {
-        const qty = item.quantity || 1;
-        const total = item.price * qty;
-        grandTotal += total;
-
-        tbody.innerHTML += `
-            <tr style="border-bottom: 1px solid #e2e8f0;">
-                <td style="padding: 10px; font-size: 12px;">${item.name}</td>
-                <td style="padding: 10px; text-align: center; font-size: 12px;">${qty}</td>
-                <td style="padding: 10px; text-align: right; font-size: 12px;">PKR ${item.price}</td>
-                <td style="padding: 10px; text-align: right; font-size: 12px;">PKR ${total}</td>
-            </tr>
-        `;
-    });
-
-    document.getElementById('inv-grand-total').innerText = `Grand Total: PKR ${grandTotal}`;
-
-    const invoiceHTML = document.getElementById('invoice-template').innerHTML;
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(`
-        <html>
-            <head>
-                <title>Invoice - ${orderData.trackingNumber || 'Hussain Sports'}</title>
-            </head>
-            <body onload="window.print(); window.close();">
-                ${invoiceHTML}
-            </body>
-        </html>
-    `);
-    printWindow.document.close();
-}
 
         fetchProducts();
         updateCartUI();
