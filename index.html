@@ -102,6 +102,7 @@
         }
         .header-search button:hover { background: var(--dark-red); }
 
+        nav { display: flex; align-items: center; }
         nav button {
             background: transparent; border: none; color: var(--text-muted);
             font-size: 14px; font-weight: 700; margin-left: 20px;
@@ -237,7 +238,7 @@
 
     <!-- HEADER -->
     <header>
-        <div class="brand-logo" onclick="handleLogoClick()">
+        <div class="brand-logo" onclick="switchTab('shop')">
             <div class="brand-logo-main">HUSSAIN <span>SPORTS ⚽</span></div>
             <div class="brand-logo-tag">Champions Choose Quality</div>
         </div>
@@ -376,9 +377,9 @@
                 <button type="submit" class="action-btn" style="margin-top: 10px;">Save Product</button>
             </form>
 
-            <h3 style="border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px;">Manage Existing Products</h3>
+            <h3 style="border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px;">Manage Existing Products (Stock +/- & Delete)</h3>
             <table id="admin-product-table">
-                <tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr>
+                <tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock Management</th><th>Action</th></tr>
             </table>
         </div>
     </div>
@@ -457,6 +458,7 @@
                 loadAdminProducts();
                 loadAdminOrders();
             }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function updateSubCats() {
@@ -772,8 +774,9 @@
                 const res = await fetch('/api/products');
                 const products = await res.json();
                 const table = document.getElementById('admin-product-table');
-                table.innerHTML = `<tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr>`;
+                table.innerHTML = `<tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock Management</th><th>Action</th></tr>`;
                 products.forEach(p => {
+                    let stockCount = p.stock !== undefined ? p.stock : 10;
                     table.innerHTML += `
                         <tr>
                             <td>#${p.id}</td>
@@ -781,12 +784,36 @@
                             <td>${p.name}</td>
                             <td>${p.category}</td>
                             <td>Rs ${p.price}.00</td>
-                            <td>${p.stock !== undefined ? p.stock : 10}</td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <button style="background: var(--border-color); color: white; border: none; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="updateStockDirect(${p.id}, -1)">-</button>
+                                    <span style="font-weight: bold; min-width: 25px; text-align: center;">${stockCount}</span>
+                                    <button style="background: var(--border-color); color: white; border: none; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="updateStockDirect(${p.id}, 1)">+</button>
+                                    <button style="background: var(--primary-red); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; margin-left: 5px;" onclick="updateStockDirect(${p.id}, 10)">+10</button>
+                                </div>
+                            </td>
                             <td><button onclick="deleteProduct(${p.id})" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Delete</button></td>
                         </tr>
                     `;
                 });
             } catch (err) { console.error(err); }
+        }
+
+        async function updateStockDirect(productId, changeAmount) {
+            try {
+                const res = await fetch('/api/admin/products/stock', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: adminPassToken, productId, change: changeAmount })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    loadAdminProducts();
+                    fetchProducts();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) { console.error("Error updating stock:", err); }
         }
 
         async function addProduct(e) {
