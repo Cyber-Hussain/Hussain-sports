@@ -41,6 +41,7 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: String,
     mobile: String,
     address: String,
+    paymentScreenshot: String,
     status: { type: String, default: 'Pending' },
     date: String
 });
@@ -77,8 +78,8 @@ app.post('/api/admin/verify', (req, res) => {
     }
 });
 
-// Public: Place Order (With Robust Stock Decrement by ID or Name)
-app.post('/api/orders', async (req, res) => {
+// Public: Place Order (With Multipart Form Data & Payment Screenshot Support)
+app.post('/api/orders', upload.single('paymentScreenshot'), async (req, res) => {
     try {
         const count = await Order.countDocuments();
         const newId = count > 0 ? (await Order.findOne().sort({ id: -1 })).id + 1 : 1;
@@ -86,13 +87,24 @@ app.post('/api/orders', async (req, res) => {
         const randomNum = Math.floor(1000 + Math.random() * 9000);
         const trackingNumber = `HS-${randomNum}-PK`;
 
-        const { items, customerName, email, paymentMethod, mobile, address, date } = req.body;
+        const { customerName, email, paymentMethod, mobile, address, date } = req.body;
+        
+        let items = [];
+        try {
+            items = req.body.items ? JSON.parse(req.body.items) : [];
+        } catch (e) {
+            items = req.body.items || [];
+        }
+
+        let screenshotPath = '';
+        if (req.file) {
+            screenshotPath = `/public/uploads/${req.file.filename}`;
+        }
 
         // Automatically decrement stock for each ordered item
         if (items && Array.isArray(items)) {
             for (let item of items) {
                 let orderedQty = item.quantity || 1;
-                // Pehle ID se search karein, agar na mile toh Name se match karein
                 let product = await Product.findOne({ 
                     $or: [
                         { id: Number(item.id) },
@@ -111,12 +123,13 @@ app.post('/api/orders', async (req, res) => {
         const newOrder = new Order({
             id: newId,
             trackingNumber,
-            items: items || [],
+            items: items,
             customerName: customerName || 'Guest Customer',
             email: email || 'N/A',
             paymentMethod: paymentMethod || 'COD',
             mobile: mobile || 'N/A',
             address: address || 'N/A',
+            paymentScreenshot: screenshotPath,
             status: 'Pending',
             date: date || new Date().toLocaleString()
         });
@@ -221,7 +234,7 @@ app.post('/api/admin/products/add', upload.single('productImage'), async (req, r
             imagePath = `/public/uploads/${req.file.filename}`;
         }
 
-        const stockQty = Number(req.body.stock || 10);
+    const stockQty = Number(req.body.stock || 10);
         const newProduct = new Product({
             id: Date.now(),
             name: req.body.name,
