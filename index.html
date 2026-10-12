@@ -828,51 +828,50 @@
         }
 
         function downloadReceiptPDF(orderData) {
-            document.getElementById('inv-order-id').innerText = `Order #${orderData.id || 'NEW'}`;
-            document.getElementById('inv-tracking').innerText = `Tracking: ${orderData.trackingNumber || 'HS-PENDING'}`;
-            document.getElementById('inv-date').innerText = `Date: ${orderData.date || new Date().toLocaleString()}`;
-            document.getElementById('inv-cust-name').innerText = `Name: ${orderData.customerName}`;
-            document.getElementById('inv-cust-mobile').innerText = `Mobile: ${orderData.mobile}`;
-            document.getElementById('inv-cust-email').innerText = `Email: ${orderData.email || 'N/A'}`;
-            document.getElementById('inv-cust-address').innerText = `Address: ${orderData.address}`;
-            document.getElementById('inv-cust-payment').innerText = `Payment: ${orderData.paymentMethod}`;
+    document.getElementById('inv-order-id').innerText = `Order #${orderData.id || 'NEW'}`;
+    document.getElementById('inv-tracking').innerText = `Tracking: ${orderData.trackingNumber || 'HS-PENDING'}`;
+    document.getElementById('inv-date').innerText = `Date: ${orderData.date || new Date().toLocaleString()}`;
+    document.getElementById('inv-cust-name').innerText = `Name: ${orderData.customerName}`;
+    document.getElementById('inv-cust-mobile').innerText = `Mobile: ${orderData.mobile}`;
+    document.getElementById('inv-cust-email').innerText = `Email: ${orderData.email || 'N/A'}`;
+    document.getElementById('inv-cust-address').innerText = `Address: ${orderData.address}`;
+    document.getElementById('inv-cust-payment').innerText = `Payment: ${orderData.paymentMethod}`;
 
-            const tbody = document.getElementById('inv-items-body');
-            tbody.innerHTML = '';
-            let grandTotal = 0;
+    const tbody = document.getElementById('inv-items-body');
+    tbody.innerHTML = '';
+    let grandTotal = 0;
 
-            orderData.items.forEach(item => {
-                const qty = item.quantity || 1;
-                const total = item.price * qty;
-                grandTotal += total;
+    orderData.items.forEach(item => {
+        const qty = item.quantity || 1;
+        const total = item.price * qty;
+        grandTotal += total;
 
-                tbody.innerHTML += `
-                    <tr style="border-bottom: 1px solid #e2e8f0;">
-                        <td style="padding: 10px; font-size: 12px;">${item.name}</td>
-                        <td style="padding: 10px; text-align: center; font-size: 12px;">${qty}</td>
-                        <td style="padding: 10px; text-align: right; font-size: 12px;">PKR ${item.price}</td>
-                        <td style="padding: 10px; text-align: right; font-size: 12px;">PKR ${total}</td>
-                    </tr>
-                `;
-            });
+        tbody.innerHTML += `
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 10px; font-size: 12px;">${item.name}</td>
+                <td style="padding: 10px; text-align: center; font-size: 12px;">${qty}</td>
+                <td style="padding: 10px; text-align: right; font-size: 12px;">PKR ${item.price}</td>
+                <td style="padding: 10px; text-align: right; font-size: 12px;">PKR ${total}</td>
+            </tr>
+        `;
+    });
 
-            document.getElementById('inv-grand-total').innerText = `Grand Total: PKR ${grandTotal}`;
+    document.getElementById('inv-grand-total').innerText = `Grand Total: PKR ${grandTotal}`;
 
-            const element = document.getElementById('invoice-template');
-            element.style.display = 'block';
-
-            const opt = {
-                margin: 0.5,
-                filename: `HussainSports_Invoice_${orderData.trackingNumber || 'Receipt'}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                element.style.display = 'none';
-            });
-        }
+    const invoiceHTML = document.getElementById('invoice-template').innerHTML;
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Invoice - ${orderData.trackingNumber || 'Hussain Sports'}</title>
+            </head>
+            <body onload="window.print(); window.close();">
+                ${invoiceHTML}
+            </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
 
         fetchProducts();
         updateCartUI();
