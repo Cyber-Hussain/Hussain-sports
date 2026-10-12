@@ -69,38 +69,14 @@
         th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
         th { background: rgba(99, 102, 241, 0.1); color: var(--accent); }
 
-        /* --- Mobile Responsive Fixes --- */
         @media (max-width: 768px) {
-            header {
-                padding: 15px 20px;
-                flex-direction: column;
-                gap: 12px;
-            }
-            nav {
-                display: flex;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-            nav button {
-                margin-left: 0 !important;
-                font-size: 14px;
-            }
-            .container {
-                margin: 20px auto;
-                padding: 0 10px;
-            }
-            .controls-bar {
-                flex-direction: column;
-            }
-            .controls-bar input, .controls-bar select {
-                width: 100%;
-            }
-            table {
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
+            header { padding: 15px 20px; flex-direction: column; gap: 12px; }
+            nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+            nav button { margin-left: 0 !important; font-size: 14px; }
+            .container { margin: 20px auto; padding: 0 10px; }
+            .controls-bar { flex-direction: column; }
+            .controls-bar input, .controls-bar select { width: 100%; }
+            table { display: block; overflow-x: auto; white-space: nowrap; }
         }
     </style>
 </head>
@@ -788,12 +764,17 @@
                     let itemsList = o.items.map(i => `${i.name} (x${i.quantity || 1}) - PKR ${(i.price || 0) * (i.quantity || 1)}`).join('<br>');
                     let currentStatus = o.status || 'Pending';
                     let trackingCode = o.trackingNumber || 'N/A';
+                    
+                    let screenshotHtml = '';
+                    if (o.paymentScreenshot) {
+                        screenshotHtml = `<br><a href="${o.paymentScreenshot}" target="_blank" style="color: var(--accent); font-weight: bold; font-size: 12px; text-decoration: underline;">📷 View Payment Receipt</a>`;
+                    }
 
                     table.innerHTML += `
                         <tr>
                             <td>#${o.id}<br><span style="color:var(--accent); font-size:11px; font-weight:bold;">${trackingCode}</span></td>
                             <td><strong>${o.customerName}</strong><br><span style="color:var(--text-muted);">${o.email}</span><br>📞 ${o.mobile}</td>
-                            <td><span class="badge ${o.paymentMethod === 'COD' ? 'in-stock' : 'out-stock'}">${o.paymentMethod}</span></td>
+                            <td><span class="badge ${o.paymentMethod === 'COD' ? 'in-stock' : 'out-stock'}">${o.paymentMethod}</span>${screenshotHtml}</td>
                             <td>${itemsList}</td>
                             <td>${o.address}</td>
                             <td>

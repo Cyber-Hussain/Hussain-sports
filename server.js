@@ -234,7 +234,7 @@ app.post('/api/admin/products/add', upload.single('productImage'), async (req, r
             imagePath = `/public/uploads/${req.file.filename}`;
         }
 
-    const stockQty = Number(req.body.stock || 10);
+        const stockQty = Number(req.body.stock || 10);
         const newProduct = new Product({
             id: Date.now(),
             name: req.body.name,
@@ -254,7 +254,7 @@ app.post('/api/admin/products/add', upload.single('productImage'), async (req, r
     }
 });
 
-// Admin: Update Product Stock (Increment / Decrement / Restock)
+// Admin: Update Product Stock
 app.post('/api/admin/products/stock', async (req, res) => {
     const { token, productId, change } = req.body;
     if (token !== ADMIN_SECRET) return res.status(403).json({ success: false, message: 'Unauthorized' });
