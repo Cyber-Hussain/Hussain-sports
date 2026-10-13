@@ -66,43 +66,6 @@
             100% { transform: translateY(-12px) rotate(-6deg); }
         }
 
-        /* --- NEW TOP CATEGORIES BAR (REPLACED ANNOUNCEMENT BAR) --- */
-        .top-categories-bar {
-            background: #111115;
-            border-bottom: 2px solid var(--border-color);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
-        }
-        .top-categories-bar::-webkit-scrollbar { display: none; }
-        
-        .top-cat-btn {
-            background: #1a1c23;
-            color: #e2e8f0;
-            border: 1px solid var(--border-color);
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 800;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .top-cat-btn:hover, .top-cat-btn.active {
-            background: var(--primary-red);
-            border-color: var(--primary-red);
-            color: #ffffff;
-            box-shadow: 0 0 12px rgba(230,25,25,0.5);
-        }
-
         /* --- HEADER --- */
         header {
             background: #121418; border-bottom: 1px solid var(--border-color);
@@ -139,22 +102,6 @@
             cursor: pointer; transition: color 0.3s;
         }
         nav button:hover, nav button.active { color: var(--primary-red); }
-
-        /* --- CATEGORIES SUB-NAVBAR --- */
-        .categories-nav {
-            background: #111113; border-bottom: 2px solid var(--border-color);
-            padding: 0 20px; display: flex; justify-content: center; align-items: center;
-            gap: 25px; overflow-x: auto; white-space: nowrap; scrollbar-width: none;
-        }
-        .categories-nav::-webkit-scrollbar { display: none; }
-        .cat-item {
-            color: #d1d5db; font-size: 13px; font-weight: 800; padding: 12px 5px;
-            cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
-            display: flex; align-items: center; gap: 4px; transition: color 0.2s, border-color 0.2s;
-            border-bottom: 2px solid transparent;
-        }
-        .cat-item:hover, .cat-item.active { color: #ffffff; border-bottom-color: var(--primary-red); }
-        .cat-item.sale-item { color: var(--primary-red); }
 
         /* --- HERO BANNER --- */
         .hero-banner {
@@ -249,11 +196,9 @@
             .header-search { margin: 10px 0; width: 100%; max-width: 100%; }
             nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
             nav button { margin-left: 0; }
-            .categories-nav { justify-content: flex-start; padding: 0 10px; }
             .hero-title { font-size: 26px; }
             .hero-subtitle { font-size: 15px; }
             table { display: block; overflow-x: auto; white-space: nowrap; }
-            .top-categories-bar { justify-content: flex-start; padding: 8px 12px; }
         }
     </style>
 </head>
@@ -268,16 +213,6 @@
             <div class="player-anim">🏃‍♂️⚽</div>
             <p style="color: var(--text-muted); margin-top: 15px; font-weight: 600; letter-spacing: 1px;">CLICK ANYWHERE TO ENTER STORE</p>
         </div>
-    </div>
-
-    <!-- NEW TOP CATEGORIES BAR -->
-    <div class="top-categories-bar">
-        <button class="top-cat-btn active" onclick="selectTopCategory('All', this)">ALL GEAR</button>
-        <button class="top-cat-btn" onclick="selectTopCategory('Balls', this)">⚽ FOOTBALLS</button>
-        <button class="top-cat-btn" onclick="selectTopCategory('Cleats', this)">👟 SHOES / CLEATS</button>
-        <button class="top-cat-btn" onclick="selectTopCategory('Jerseys', this)">👕 JERSEYS</button>
-        <button class="top-cat-btn" onclick="selectTopCategory('Cricket', this)">🏏 CRICKET</button>
-        <button class="top-cat-btn" onclick="selectTopCategory('Accessories', this)">🛡️ ACCESSORIES</button>
     </div>
 
     <!-- HEADER -->
@@ -299,19 +234,6 @@
             <button onclick="promptAdminLogin()" id="nav-admin" style="color: var(--primary-red);">🔐 Admin</button>
         </nav>
     </header>
-
-    <!-- CATEGORIES SUB-NAVBAR -->
-    <div class="categories-nav">
-        <div class="cat-item active" onclick="filterByCategory('All', this)">SHOP BY ⌄</div>
-        <div class="cat-item" onclick="filterByCategory('Football', this)">MEN ⌄</div>
-        <div class="cat-item" onclick="filterByCategory('Cricket', this)">KIDS ⌄</div>
-        <div class="cat-item" onclick="filterBySubCategory('Jerseys', this)">FOOTBALL T-SHIRT ⌄</div>
-        <div class="cat-item" onclick="filterBySubCategory('Accessories', this)">SPORTS ITEMS ⌄</div>
-        <div class="cat-item" onclick="filterBySubCategory('Cleats', this)">SHOES ⌄</div>
-        <div class="cat-item sale-item" onclick="filterBySubCategory('Jerseys', this)">SALE</div>
-        <div class="cat-item" onclick="filterByCategory('All', this)">TOP SELLING</div>
-        <div class="cat-item" onclick="alert('Hussain Sports - Premium Quality Sports Apparel & Gear Store in Pakistan.')">ABOUT US</div>
-    </div>
 
     <!-- HERO BANNER -->
     <div class="hero-banner">
@@ -501,24 +423,6 @@
             }
         }
 
-        function selectTopCategory(catKey, btn) {
-            document.querySelectorAll('.top-cat-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-
-            if (catKey === 'All') {
-                document.getElementById('filter-category').value = 'All';
-                document.getElementById('filter-subcategory').value = 'All';
-            } else if (catKey === 'Cricket') {
-                document.getElementById('filter-category').value = 'Cricket';
-                document.getElementById('filter-subcategory').value = 'All';
-            } else {
-                document.getElementById('filter-category').value = 'All';
-                document.getElementById('filter-subcategory').value = catKey;
-            }
-            filterProducts();
-            switchTab('shop');
-        }
-
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
@@ -672,17 +576,13 @@
             displayProducts(filtered);
         }
 
-        function filterByCategory(catName, el) {
-            document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
-            if(el) el.classList.add('active');
+        function filterByCategory(catName) {
             document.getElementById('filter-category').value = catName;
             filterProducts();
             switchTab('shop');
         }
 
-        function filterBySubCategory(subCatName, el) {
-            document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
-            if(el) el.classList.add('active');
+        function filterBySubCategory(subCatName) {
             document.getElementById('filter-subcategory').value = subCatName;
             filterProducts();
             switchTab('shop');
