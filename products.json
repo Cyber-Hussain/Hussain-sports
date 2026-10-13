@@ -1,142 +1,202 @@
 [
-  
   {
-    "id": 9,
-    "name": "Trionda Fifa 2026 football",
+    "id": 1,
+    "name": "Trionda Fifa 2026 Football",
     "price": 2600,
     "category": "Football",
     "subCategory": "Balls",
+    "stock": 10,
     "inStock": true,
-    "image": "/public/uploads/866cb3f86b233906fad9ad1e217d0076"
+    "image": "https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=500"
   },
   {
-    "id": 10,
+    "id": 2,
     "name": "Shin Guard",
     "price": 300,
     "category": "Football",
     "subCategory": "Accessories",
+    "stock": 15,
     "inStock": true,
-    "image": "/public/uploads/944aaab7893dddeb11beff37d8c85669"
+    "image": "https://images.unsplash.com/photo-1526232761682-d26e03ac148e?w=500"
   },
   {
-    "id": 12,
+    "id": 3,
     "name": "Addidas F50",
     "price": 17000,
     "category": "Football",
     "subCategory": "Cleats",
+    "stock": 8,
     "inStock": true,
-    "image": "/public/uploads/aa6c34d3e8bb25f94084ff05ec22e36f"
+    "image": "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500"
   },
   {
-    "id": 13,
-    "name": "Umbro Gt pro",
+    "id": 4,
+    "name": "Umbro Gt Pro",
     "price": 19000,
     "category": "Football",
     "subCategory": "Cleats",
+    "stock": 7,
     "inStock": true,
-    "image": "/public/uploads/d9810b0536ea626ec652a0de58ecd1be"
+    "image": "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500"
   },
   {
-    "id": 14,
-    "name": "Nike air zoom meriucal vapor",
+    "id": 5,
+    "name": "Nike Air Zoom Mercurial Vapor",
     "price": 22000,
     "category": "Football",
     "subCategory": "Cleats",
-    "inStock": true,
-    "image": "/public/uploads/8bb11cf5a6516b7c1c1cc64294a6a039"
-  },
-  {
-    "id": 15,
-    "name": "Addidas F50 Grippers",
-    "price": 17000,
-    "category": "Football",
-    "subCategory": "Grippers",
-    "inStock": true,
-    "image": "/public/uploads/92e0bd6e1c0603cbb9a05f691c6459b7"
-  },
-  {
-    "id": 16,
-    "name": "Nike Obra 1",
-    "price": 15000,
-    "category": "Football",
-    "subCategory": "Cleats",
-    "inStock": true,
-    "image": "/public/uploads/e2bac528f8b2be9d91cd61cbfe6217a1"
-  },
-  {
-    "id": 17,
-    "name": "Vibrant Cr7 Grippers ",
-    "price": 13000,
-    "category": "Football",
-    "subCategory": "Grippers",
-    "inStock": true,
-    "image": "/public/uploads/b949fe016426035102332c507af8cbcb"
-  },
-  {
-    "id": 18,
-    "name": "fifa 2025 ball",
-    "price": 2700,
-    "category": "Football",
-    "subCategory": "Balls",
-    "inStock": true,
-    "image": "/public/uploads/0ed1833fefba9197d146578aa5dc510a"
-  },
-  {
-    "id": 19,
-    "name": "Germany Euro Cup 2024 Ball",
-    "price": 2600,
-    "category": "Football",
-    "subCategory": "Balls",
-    "inStock": true,
-    "image": "/public/uploads/ef9b11e3e92991de6416f767f3520e48"
-  },
-  {
-    "id": 20,
-    "name": "Italy Spain Crazy Football",
-    "price": 2898,
-    "category": "Football",
-    "subCategory": "Balls",
-    "inStock": true,
-    "image": "/public/uploads/3a806e1bea7f7e0c3872af4bf41ff615"
-  },
-  {
-    "id": 21,
-    "name": "Addidas Unforia Pro Football",
-    "price": 3100,
-    "category": "Football",
-    "subCategory": "Balls",
-    "inStock": true,
-    "image": "/public/uploads/8ac1999a6cb44217521079a195f5ca30"
-  },
-  {
-    "id": 10,
-    "name": "Adidas Predator Elite Zidane Foldover FG",
-    "category": "Football",
-    "subCategory": "Cleats",
-    "price": 26500,
-    "stock": 4,
+    "stock": 6,
     "inStock": true,
     "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
   },
   {
-    "id": 8,
-    "name": "Nike Phantom GX 2 Low Elite FG",
+    "id": 6,
+    "name": "Addidas F50 Grippers",
+    "price": 17000,
     "category": "Football",
-    "subCategory": "Cleats",
-    "price": 24000,
-    "stock": 5,
+    "subCategory": "Grippers",
+    "stock": 10,
     "inStock": true,
     "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
   },
   {
     "id": 7,
-    "name": "Nike Mercurial Vapor 17 Elite FG",
+    "name": "Nike Obra 1",
+    "price": 15000,
     "category": "Football",
     "subCategory": "Cleats",
+    "stock": 5,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500"
+  },
+  {
+    "id": 8,
+    "name": "Vibrant CR7 Grippers",
+    "price": 13000,
+    "category": "Football",
+    "subCategory": "Grippers",
+    "stock": 12,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+  },
+  {
+    "id": 9,
+    "name": "Fifa 2025 Ball",
+    "price": 2700,
+    "category": "Football",
+    "subCategory": "Balls",
+    "stock": 10,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500"
+  },
+  {
+    "id": 10,
+    "name": "Germany Euro Cup 2024 Ball",
+    "price": 2600,
+    "category": "Football",
+    "subCategory": "Balls",
+    "stock": 9,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500"
+  },
+  {
+    "id": 11,
+    "name": "Italy Spain Crazy Football",
+    "price": 2898,
+    "category": "Football",
+    "subCategory": "Balls",
+    "stock": 10,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1560272564-6694ea69185a?w=500"
+  },
+  {
+    "id": 12,
+    "name": "Addidas Uniforia Pro Football",
+    "price": 3100,
+    "category": "Football",
+    "subCategory": "Balls",
+    "stock": 8,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1560272564-6694ea69185a?w=500"
+  },
+  {
+    "id": 13,
+    "name": "Adidas Predator Elite Zidane Foldover FG",
+    "price": 26500,
+    "category": "Football",
+    "subCategory": "Cleats",
+    "stock": 4,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+  },
+  {
+    "id": 14,
+    "name": "Nike Phantom GX 2 Low Elite FG",
+    "price": 24000,
+    "category": "Football",
+    "subCategory": "Cleats",
+    "stock": 5,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+  },
+  {
+    "id": 15,
+    "name": "Nike Mercurial Vapor 17 Elite FG",
     "price": 22000,
+    "category": "Football",
+    "subCategory": "Cleats",
     "stock": 6,
     "inStock": true,
     "image": "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500"
+  },
+  {
+    "id": 16,
+    "name": "Kylian Mbappé Real Madrid Home Jersey",
+    "price": 2500,
+    "category": "Football",
+    "subCategory": "Jerseys",
+    "stock": 15,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=500"
+  },
+  {
+    "id": 17,
+    "name": "Jude Bellingham Real Madrid Away Jersey",
+    "price": 2500,
+    "category": "Football",
+    "subCategory": "Jerseys",
+    "stock": 12,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1580052614034-c55d20bfee37?w=500"
+  },
+  {
+    "id": 18,
+    "name": "Lamine Yamal Barcelona Home Jersey",
+    "price": 2500,
+    "category": "Football",
+    "subCategory": "Jerseys",
+    "stock": 14,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=500"
+  },
+  {
+    "id": 19,
+    "name": "Lionel Messi Argentina Home World Cup Jersey",
+    "price": 2700,
+    "category": "Football",
+    "subCategory": "Jerseys",
+    "stock": 20,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500"
+  },
+  {
+    "id": 20,
+    "name": "Cristiano Ronaldo Al Nassr Home Jersey",
+    "price": 2500,
+    "category": "Football",
+    "subCategory": "Jerseys",
+    "stock": 18,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=500"
   }
-
 ]
