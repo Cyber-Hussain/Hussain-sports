@@ -37,15 +37,9 @@ function writeJSON(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
 
-// Initial Products Data
-if (!fs.existsSync(productsFile) || readJSON(productsFile).length === 0) {
-    const initialProducts = [
-        { id: 1, name: "Addidas F50", category: "Football", subCategory: "Cleats", price: 16000, stock: 7, inStock: true, image: "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500" },
-        { id: 2, name: "Trionda Fifa 2026 Football", category: "Football", subCategory: "Balls", price: 2700, stock: 9, inStock: true, image: "https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=500" },
-        { id: 3, name: "Euro 2024 Original Football", category: "Football", subCategory: "Balls", price: 2500, stock: 9, inStock: true, image: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500" },
-        { id: 4, name: "Italy Spain Crazy Football", category: "Football", subCategory: "Balls", price: 2700, stock: 10, inStock: true, image: "https://images.unsplash.com/photo-1560272564-6694ea69185a?w=500" }
-    ];
-    writeJSON(productsFile, initialProducts);
+// Initial Products Data (Empty by default)
+if (!fs.existsSync(productsFile)) {
+    writeJSON(productsFile, []);
 }
 
 // GET ALL PRODUCTS
