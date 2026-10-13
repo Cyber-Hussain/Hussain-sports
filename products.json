@@ -1,13 +1,5 @@
 [
-  {
-    "id": 1,
-    "name": "Professional Cricket Bat",
-    "price": 8500,
-    "category": "Cricket",
-    "subCategory": "Bats",
-    "inStock": true,
-    "image": "https://images.unsplash.com/photo-1593341646782-e0b495cff86d?w=500"
-  },
+  
   {
     "id": 9,
     "name": "Trionda Fifa 2026 football",
@@ -25,15 +17,6 @@
     "subCategory": "Accessories",
     "inStock": true,
     "image": "/public/uploads/944aaab7893dddeb11beff37d8c85669"
-  },
-  {
-    "id": 11,
-    "name": "Cricket Batting Gloves CA original",
-    "price": 3500,
-    "category": "Cricket",
-    "subCategory": "Gloves",
-    "inStock": true,
-    "image": "/public/uploads/59aca234a496a9311b3d52262fc6aa89"
   },
   {
     "id": 12,
@@ -124,5 +107,36 @@
     "subCategory": "Balls",
     "inStock": true,
     "image": "/public/uploads/8ac1999a6cb44217521079a195f5ca30"
+  },
+  {
+    "id": 10,
+    "name": "Adidas Predator Elite Zidane Foldover FG",
+    "category": "Football",
+    "subCategory": "Cleats",
+    "price": 26500,
+    "stock": 4,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+  },
+  {
+    "id": 8,
+    "name": "Nike Phantom GX 2 Low Elite FG",
+    "category": "Football",
+    "subCategory": "Cleats",
+    "price": 24000,
+    "stock": 5,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+  },
+  {
+    "id": 7,
+    "name": "Nike Mercurial Vapor 17 Elite FG",
+    "category": "Football",
+    "subCategory": "Cleats",
+    "price": 22000,
+    "stock": 6,
+    "inStock": true,
+    "image": "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500"
   }
+
 ]
