@@ -8,7 +8,15 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+// Path check for public directory
+const publicPath = path.join(__dirname, 'public');
+if (fs.existsSync(publicPath)) {
+    app.use(express.static(publicPath));
+} else {
+    app.use(express.static(__dirname));
+}
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 if (!fs.existsSync('./uploads')) {
@@ -168,6 +176,17 @@ app.post('/api/admin/products/delete', (req, res) => {
     res.json({ success: true });
 });
 
+// SERVE INDEX.HTML FOR ROOT PATH
+app.get('*', (req, res) => {
+    if (fs.existsSync(path.join(__dirname, 'public', 'index.html'))) {
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    } else if (fs.existsSync(path.join(__dirname, 'index.html'))) {
+        res.sendFile(path.join(__dirname, 'index.html'));
+    } else {
+        res.send("index.html file missing!");
+    }
+});
+
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

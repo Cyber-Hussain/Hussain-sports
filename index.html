@@ -66,11 +66,41 @@
             100% { transform: translateY(-12px) rotate(-6deg); }
         }
 
-        /* --- NOTIFICATION BAR --- */
-        .top-notice-bar {
-            background: linear-gradient(90deg, #990000, var(--primary-red), #990000);
-            color: #fff; text-align: center; padding: 7px 10px;
-            font-size: 12px; font-weight: 800; letter-spacing: 1.5px;
+        /* --- NEW TOP CATEGORIES BAR (REPLACED ANNOUNCEMENT BAR) --- */
+        .top-categories-bar {
+            background: #111115;
+            border-bottom: 2px solid var(--border-color);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .top-categories-bar::-webkit-scrollbar { display: none; }
+        
+        .top-cat-btn {
+            background: #1a1c23;
+            color: #e2e8f0;
+            border: 1px solid var(--border-color);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .top-cat-btn:hover, .top-cat-btn.active {
+            background: var(--primary-red);
+            border-color: var(--primary-red);
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(230,25,25,0.5);
         }
 
         /* --- HEADER --- */
@@ -223,6 +253,7 @@
             .hero-title { font-size: 26px; }
             .hero-subtitle { font-size: 15px; }
             table { display: block; overflow-x: auto; white-space: nowrap; }
+            .top-categories-bar { justify-content: flex-start; padding: 8px 12px; }
         }
     </style>
 </head>
@@ -239,9 +270,14 @@
         </div>
     </div>
 
-    <!-- ANNOUNCEMENT BAR -->
-    <div class="top-notice-bar">
-        🏆 WELCOME TO HUSSAIN SPORTS! — OFFICIAL CHAMPIONS STORE ⚽
+    <!-- NEW TOP CATEGORIES BAR -->
+    <div class="top-categories-bar">
+        <button class="top-cat-btn active" onclick="selectTopCategory('All', this)">ALL GEAR</button>
+        <button class="top-cat-btn" onclick="selectTopCategory('Balls', this)">⚽ FOOTBALLS</button>
+        <button class="top-cat-btn" onclick="selectTopCategory('Cleats', this)">👟 SHOES / CLEATS</button>
+        <button class="top-cat-btn" onclick="selectTopCategory('Jerseys', this)">👕 JERSEYS</button>
+        <button class="top-cat-btn" onclick="selectTopCategory('Cricket', this)">🏏 CRICKET</button>
+        <button class="top-cat-btn" onclick="selectTopCategory('Accessories', this)">🛡️ ACCESSORIES</button>
     </div>
 
     <!-- HEADER -->
@@ -463,6 +499,24 @@
             } else if (logoClicks === 1) {
                 switchTab('shop');
             }
+        }
+
+        function selectTopCategory(catKey, btn) {
+            document.querySelectorAll('.top-cat-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+
+            if (catKey === 'All') {
+                document.getElementById('filter-category').value = 'All';
+                document.getElementById('filter-subcategory').value = 'All';
+            } else if (catKey === 'Cricket') {
+                document.getElementById('filter-category').value = 'Cricket';
+                document.getElementById('filter-subcategory').value = 'All';
+            } else {
+                document.getElementById('filter-category').value = 'All';
+                document.getElementById('filter-subcategory').value = catKey;
+            }
+            filterProducts();
+            switchTab('shop');
         }
 
         function switchTab(tabId) {
