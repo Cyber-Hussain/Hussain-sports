@@ -8,15 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Path check for public directory
-const publicPath = path.join(__dirname, 'public');
-if (fs.existsSync(publicPath)) {
-    app.use(express.static(publicPath));
-} else {
-    app.use(express.static(__dirname));
-}
-
+app.use(express.static(__dirname));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 if (!fs.existsSync('./uploads')) {
@@ -125,7 +117,7 @@ app.post('/api/admin/orders/status', (req, res) => {
     if (order) {
         order.status = status;
         writeJSON(ordersFile, orders);
-        res.json({ success: true });
+        res.json({ success: true, message: "Status updated successfully!" });
     } else {
         res.status(404).json({ success: false, message: "Order not found" });
     }
@@ -148,7 +140,7 @@ app.post('/api/admin/products/add', upload.single('productImage'), (req, res) =>
     };
     products.push(newProd);
     writeJSON(productsFile, products);
-    res.json({ success: true });
+    res.json({ success: true, message: "Product added successfully!" });
 });
 
 // ADMIN: STOCK INCREMENT / DECREMENT
@@ -176,15 +168,9 @@ app.post('/api/admin/products/delete', (req, res) => {
     res.json({ success: true });
 });
 
-// SERVE INDEX.HTML FOR ROOT PATH
-app.get('*', (req, res) => {
-    if (fs.existsSync(path.join(__dirname, 'public', 'index.html'))) {
-        res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    } else if (fs.existsSync(path.join(__dirname, 'index.html'))) {
-        res.sendFile(path.join(__dirname, 'index.html'));
-    } else {
-        res.send("index.html file missing!");
-    }
+// ROOT ROUTE
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(PORT, () => {
