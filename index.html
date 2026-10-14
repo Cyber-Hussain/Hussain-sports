@@ -355,38 +355,52 @@
                 <tr><th>ID / Tracking</th><th>Customer</th><th>Payment</th><th>Items</th><th>Address</th><th>Status & Action</th><th>Date</th></tr>
             </table>
 
-            <h3 style="border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-top: 40px; margin-bottom: 15px;">Add New Product</h3>
-            <form onsubmit="addProduct(event)" style="background: var(--bg-card); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border-color); margin-bottom: 35px;">
-                <label>Product Name:</label>
-                <input type="text" id="new-name" required>
-                <label>Price (PKR):</label>
-                <input type="number" id="new-price" required>
-                <label>Stock Quantity:</label>
-                <input type="number" id="new-stock" required>
-                <label>Category:</label>
-                <select id="new-cat" required onchange="updateSubCats()">
-                    <option value="Football">Football</option>
-                    <option value="Cricket">Cricket</option>
-                </select>
-                <label>Sub-Category:</label>
-                <select id="new-subcat" required>
-                    <option value="Balls">Balls</option>
-                    <option value="Jerseys">Jerseys</option>
-                    <option value="Cleats">Cleats</option>
-                    <option value="Grippers">Grippers</option>
-                    <option value="Accessories">Accessories</option>
-                </select>
-                <label>Product Image:</label>
-                <input type="file" id="new-image" accept="image/*">
-                <button type="submit" class="action-btn" style="margin-top: 10px;">Save Product</button>
-            </form>
+            <h3 style="border-bottom: 2px solid var(--primary-red); padding-bottom: 10px; margin-top: 40px; margin-bottom: 20px; font-size: 20px; letter-spacing: 0.5px;">➕ Add New Product</h3>
+            <form onsubmit="addProduct(event)" style="background: linear-gradient(145deg, #16181d 0%, #111318 100%); padding: 30px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 35px; box-shadow: 0 8px 25px rgba(0,0,0,0.4);">
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 600; font-size: 13px;">Product Name:</label>
+                    <input type="text" id="new-name" required placeholder="Enter product name..." style="width: 100%; padding: 12px; background: #0c0c0e; border: 1px solid var(--border-color); color: #fff; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.3s;">
+                </div>
 
-            <h3 style="border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px;">Manage Existing Products (Stock Controls)</h3>
-            <table id="admin-product-table">
-                <tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock Controls</th><th>Action</th></tr>
-            </table>
-        </div>
-    </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 600; font-size: 13px;">Price (PKR):</label>
+                        <input type="number" id="new-price" required placeholder="e.g. 2500" style="width: 100%; padding: 12px; background: #0c0c0e; border: 1px solid var(--border-color); color: #fff; border-radius: 8px; font-size: 14px; outline: none;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 600; font-size: 13px;">Stock Quantity:</label>
+                        <input type="number" id="new-stock" required placeholder="e.g. 15" style="width: 100%; padding: 12px; background: #0c0c0e; border: 1px solid var(--border-color); color: #fff; border-radius: 8px; font-size: 14px; outline: none;">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 600; font-size: 13px;">Category:</label>
+                        <select id="new-cat" required onchange="updateSubCats()" style="width: 100%; padding: 12px; background: #0c0c0e; border: 1px solid var(--border-color); color: #fff; border-radius: 8px; font-size: 14px; outline: none;">
+                            <option value="Football">Football</option>
+                            <option value="Cricket">Cricket</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 600; font-size: 13px;">Sub-Category:</label>
+                        <select id="new-subcat" required style="width: 100%; padding: 12px; background: #0c0c0e; border: 1px solid var(--border-color); color: #fff; border-radius: 8px; font-size: 14px; outline: none;">
+                            <option value="Balls">Balls</option>
+                            <option value="Jerseys">Jerseys</option>
+                            <option value="Cleats">Cleats</option>
+                            <option value="Grippers">Grippers</option>
+                            <option value="Accessories">Accessories</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 600; font-size: 13px;">Product Image:</label>
+                    <input type="file" id="new-image" accept="image/*" style="width: 100%; padding: 10px; background: #0c0c0e; border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 8px; font-size: 13px; cursor: pointer;">
+                </div>
+
+                <button type="submit" style="width: 100%; background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(230,25,25,0.4); transition: transform 0.2s;">💾 Save Product</button>
+            </form>
 
     <!-- INVOICE TEMPLATE -->
     <div id="invoice-template" style="display: none; padding: 30px; background: #fff; color: #000; font-family: Arial, sans-serif;">
