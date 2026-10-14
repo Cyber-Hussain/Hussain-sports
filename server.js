@@ -37,7 +37,6 @@ function writeJSON(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
 
-// Initial Products Data (Empty by default)
 if (!fs.existsSync(productsFile)) {
     writeJSON(productsFile, []);
 }
@@ -100,6 +99,47 @@ app.get('/api/track/:trackingNumber', (req, res) => {
 app.post('/api/admin/orders', (req, res) => {
     if (req.body.token !== 'hussain123') return res.status(403).json({ success: false, message: "Unauthorized" });
     res.json({ success: true, orders: readJSON(ordersFile) });
+});
+
+// ADMIN: STATS & ANALYTICS API
+app.post('/api/admin/stats', (req, res) => {
+    if (req.body.token !== 'hussain123') return res.status(403).json({ success: false, message: "Unauthorized" });
+    const products = readJSON(productsFile);
+    const orders = readJSON(ordersFile);
+
+    let totalSales = 0;
+    let productSalesCount = {};
+
+    orders.forEach(order => {
+        if (order.status !== 'Cancelled') {
+            let orderTotal = 0;
+            if (order.items && Array.isArray(order.items)) {
+                order.items.forEach(item => {
+                    const sub = (item.price || 0) * (item.quantity || 1);
+                    orderTotal += sub;
+                    productSalesCount[item.name] = (productSalesCount[item.name] || 0) + (item.quantity || 1);
+                });
+            }
+            totalSales += orderTotal;
+        }
+    });
+
+    // Find top selling product
+    let topProduct = "N/A";
+    let maxQty = 0;
+    for (let [name, qty] of Object.entries(productSalesCount)) {
+        if (qty > maxQty) {
+            maxQty = qty;
+            topProduct = name;
+        }
+    }
+
+    res.json({
+        success: true,
+        totalProducts: products.length,
+        totalSales: totalSales,
+        topSellingProduct: topProduct
+    });
 });
 
 // ADMIN: UPDATE ORDER STATUS

@@ -113,56 +113,60 @@
         .hero-title { font-size: 46px; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 10px rgba(0,0,0,0.9); }
         .hero-subtitle { font-size: 22px; color: var(--accent-yellow); font-weight: 800; margin-top: 10px; text-transform: uppercase; text-shadow: 1px 1px 8px rgba(0,0,0,0.9); }
 
-        /* --- CONTAINER & PRODUCTS --- */
+        /* --- CONTAINER & PRODUCTS (RESPONSIVE GRID) --- */
         .container { max-width: 1200px; margin: 20px auto 50px auto; padding: 0 20px; flex: 1; width: 100%; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 25px; }
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 15px; 
+        }
         .product-card {
             background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius);
             overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             display: flex; flex-direction: column; transition: transform 0.3s, border-color 0.3s;
         }
         .product-card:hover { transform: translateY(-5px); border-color: var(--primary-red); }
-        .product-card img { width: 100%; height: 210px; object-fit: cover; background: #111; }
-        .product-info { padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-card img { width: 100%; height: 160px; object-fit: cover; background: #111; }
+        .product-info { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         
-        .product-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; text-transform: uppercase; }
-        .stock-badge { font-size: 12px; font-weight: bold; color: #22c55e; display: block; margin-bottom: 4px; }
-        .stock-count { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 10px; }
+        .product-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; text-transform: uppercase; }
+        .stock-badge { font-size: 11px; font-weight: bold; color: #22c55e; display: block; margin-bottom: 2px; }
+        .stock-count { font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 6px; }
         
-        .price-box { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
-        .product-price { font-size: 18px; color: #fff; font-weight: 800; }
-        .old-price { font-size: 13px; color: var(--text-muted); text-decoration: line-through; }
+        .price-box { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+        .product-price { font-size: 15px; color: #fff; font-weight: 800; }
+        .old-price { font-size: 11px; color: var(--text-muted); text-decoration: line-through; }
 
-        .size-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+        .size-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
         
-        .size-options { display: flex; gap: 6px; margin-bottom: 15px; flex-wrap: wrap; }
+        .size-options { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
         .size-btn {
             background: #111318; border: 1px solid var(--border-color); color: #fff;
-            padding: 5px 10px; font-size: 11px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: 0.2s;
+            padding: 4px 8px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; transition: 0.2s;
         }
         .size-btn.selected { border-color: var(--primary-red); background: rgba(230,25,25,0.2); color: var(--primary-red); }
 
-        .qty-add-box { display: flex; gap: 10px; margin-bottom: 10px; }
+        .qty-add-box { display: flex; gap: 6px; margin-bottom: 8px; }
         .qty-selector {
             display: flex; align-items: center; background: #111318; border: 1px solid var(--border-color);
-            border-radius: 6px; overflow: hidden; width: 100px;
+            border-radius: 6px; overflow: hidden; width: 85px;
         }
-        .qty-selector button { background: transparent; border: none; color: #fff; width: 30px; height: 38px; cursor: pointer; font-weight: bold; font-size: 14px; }
-        .qty-selector input { width: 40px; text-align: center; background: transparent; border: none; color: #fff; font-weight: bold; font-size: 14px; outline: none; }
+        .qty-selector button { background: transparent; border: none; color: #fff; width: 25px; height: 32px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .qty-selector input { width: 35px; text-align: center; background: transparent; border: none; color: #fff; font-weight: bold; font-size: 12px; outline: none; }
 
         .add-to-cart-btn {
             flex: 1; background: var(--primary-red); color: white; border: none;
-            padding: 10px; border-radius: 6px; font-weight: 700; font-size: 13px;
-            cursor: pointer; transition: background 0.3s; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;
+            padding: 8px; border-radius: 6px; font-weight: 700; font-size: 12px;
+            cursor: pointer; transition: background 0.3s; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px;
         }
         .add-to-cart-btn:hover { background: var(--dark-red); }
 
         .quick-buy-btn {
             background: #111318; color: #fff; border: 1px solid var(--border-color);
-            padding: 10px; border-radius: 6px; font-weight: 700; font-size: 13px;
+            padding: 8px; border-radius: 6px; font-weight: 700; font-size: 12px;
             cursor: pointer; width: 100%; transition: 0.3s; text-align: center;
         }
         .quick-buy-btn:hover { border-color: #fff; background: #1c1f26; }
@@ -176,6 +180,23 @@
         }
         .whatsapp-float:hover { transform: scale(1.1); }
 
+        /* ADMIN STATS CARDS */
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .stat-card h4 { color: var(--text-muted); font-size: 13px; text-transform: uppercase; margin-bottom: 8px; }
+        .stat-card p { font-size: 24px; font-weight: 800; color: #fff; }
+
         /* TABLES & FORMS */
         table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-color); margin-top: 15px; }
         th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 14px; }
@@ -183,7 +204,6 @@
         form label { display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 600; font-size: 13px; }
         form input, form select, form textarea { width: 100%; padding: 11px; background: #111318; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; margin-bottom: 15px; font-size: 14px; }
 
-        /* STOCK BUTTONS IN ADMIN TABLE */
         .stock-btn {
             background: #262933; color: #fff; border: 1px solid #3b3f51; width: 28px; height: 28px;
             border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px;
@@ -199,6 +219,7 @@
             .hero-title { font-size: 26px; }
             .hero-subtitle { font-size: 15px; }
             table { display: block; overflow-x: auto; white-space: nowrap; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
         }
     </style>
 </head>
@@ -313,6 +334,22 @@
         <div id="admin" class="tab-content">
             <h2 style="color: var(--primary-red); margin-bottom: 25px;">🔐 Admin Dashboard - Store Management</h2>
             
+            <!-- ANALYTICS CARDS -->
+            <div class="admin-stats-grid">
+                <div class="stat-card">
+                    <h4>Total Products</h4>
+                    <p id="stat-total-products">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Sales</h4>
+                    <p id="stat-total-sales">Rs 0.00</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Top Selling Product</h4>
+                    <p id="stat-top-product" style="font-size: 16px; margin-top: 5px;">-</p>
+                </div>
+            </div>
+
             <h3 style="border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px;">📦 Customer Orders Received</h3>
             <table id="admin-orders-table">
                 <tr><th>ID / Tracking</th><th>Customer</th><th>Payment</th><th>Items</th><th>Address</th><th>Status & Action</th><th>Date</th></tr>
@@ -432,6 +469,7 @@
             if (tabId === 'admin') {
                 loadAdminProducts();
                 loadAdminOrders();
+                loadAdminStats();
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -576,18 +614,6 @@
             displayProducts(filtered);
         }
 
-        function filterByCategory(catName) {
-            document.getElementById('filter-category').value = catName;
-            filterProducts();
-            switchTab('shop');
-        }
-
-        function filterBySubCategory(subCatName) {
-            document.getElementById('filter-subcategory').value = subCatName;
-            filterProducts();
-            switchTab('shop');
-        }
-
         function updateCartUI() {
             const count = cart.reduce((sum, i) => sum + i.quantity, 0);
             document.getElementById('cart-count').innerText = count;
@@ -699,6 +725,22 @@
             } catch (err) { console.error(err); }
         }
 
+        async function loadAdminStats() {
+            try {
+                const res = await fetch('/api/admin/stats', { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({ token: adminPassToken }) 
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('stat-total-products').innerText = data.totalProducts;
+                    document.getElementById('stat-total-sales').innerText = `Rs ${data.totalSales}.00`;
+                    document.getElementById('stat-top-product').innerText = data.topSellingProduct;
+                }
+            } catch (err) { console.error("Error loading admin stats:", err); }
+        }
+
         async function loadAdminOrders() {
             try {
                 const res = await fetch('/api/admin/orders', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ token: adminPassToken }) });
@@ -738,6 +780,7 @@
             await fetch('/api/admin/orders/status', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ token: adminPassToken, orderId, status }) });
             alert("Status updated!");
             loadAdminOrders();
+            loadAdminStats();
         }
 
         async function loadAdminProducts() {
@@ -804,6 +847,7 @@
             e.target.reset();
             fetchProducts();
             loadAdminProducts();
+            loadAdminStats();
         }
 
         async function deleteProduct(id) {
@@ -811,6 +855,7 @@
             await fetch('/api/admin/products/delete', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ token: adminPassToken, productId: id }) });
             loadAdminProducts();
             fetchProducts();
+            loadAdminStats();
         }
 
         function downloadReceiptPDF(orderData) {
