@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Hussain Sports 🏆</title>
+    <style>
+        :root {
+            --primary-red: #e61919;
+            --dark-red: #a11010;
+            --bg-main: #0c0c0e;
+            --bg-card: #16181d;
+            --border-color: #262933;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --radius: 10px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        header {
+            background: #121418; border-bottom: 1px solid var(--border-color);
+            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand-logo-main { font-size: 22px; font-weight: 900; font-style: italic; color: #fff; cursor: pointer; }
+        .brand-logo-main span { color: var(--primary-red); }
+
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; }
+        .product-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--bg-card); padding: 30px; border-radius: var(--radius); border: 1px solid var(--border-color); }
+        
+        /* Gallery Styles */
+        .gallery-main-img { width: 100%; height: 350px; object-fit: cover; border-radius: 8px; background: #111; border: 1px solid var(--border-color); }
+        .thumbnails-row { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; }
+        .thumb-img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid var(--border-color); transition: 0.2s; }
+        .thumb-img:hover, .thumb-img.active { border-color: var(--primary-red); }
+
+        /* Info & Specs */
+        .prod-info h1 { font-size: 24px; text-transform: uppercase; margin-bottom: 15px; }
+        .prod-price { font-size: 22px; font-weight: 800; color: #22c55e; margin-bottom: 15px; }
+        .specs-box { margin: 20px 0; background: #111318; padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); }
+        .specs-box h3 { font-size: 15px; color: var(--primary-red); margin-bottom: 8px; text-transform: uppercase; }
+        .specs-box ul { list-style-type: none; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+        .specs-box ul li span { color: #fff; font-weight: 600; }
+
+        .back-btn { background: #222; color: #fff; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px; }
+        .back-btn:hover { background: #333; }
+
+        .add-cart-btn { background: var(--primary-red); color: #fff; border: none; width: 100%; padding: 14px; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; margin-top: 20px; }
+        .add-cart-btn:hover { background: var(--dark-red); }
+
+        @media (max-width: 768px) {
+            .product-detail-grid { grid-template-columns: 1fr; gap: 20px; padding: 15px; }
+            header { padding: 12px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-logo-main" onclick="window.location.href='/'">HUSSAIN <span>SPORTS 🏆</span></div>
+    </header>
+
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Store</a>
+        
+        <div class="product-detail-grid">
+            <!-- Left: Gallery -->
+            <div>
+                <img id="main-preview" src="" alt="Product Image" class="gallery-main-img">
+                <div class="thumbnails-row" id="thumbnails-container"></div>
+            </div>
+
+            <!-- Right: Info & Specs -->
+            <div class="prod-info">
+                <h1 id="prod-name">Loading...</h1>
+                <div class="prod-price" id="prod-price">Rs 0</div>
+                <p id="prod-stock" style="font-size: 13px; color: #22c55e; font-weight: bold; margin-bottom: 15px;"></p>
+                
+                <div id="size-section"></div>
+
+                <!-- Specifications Box -->
+                <div class="specs-box">
+                    <h3>Product Specifications</h3>
+                    <ul id="specs-list">
+                        <li>Category: <span id="spec-cat">-</span></li>
+                        <li>Sub-Category: <span id="spec-subcat">-</span></li>
+                        <li>Quality: <span>100% Original Master Replica / Pro Grade</span></li>
+                        <li>Delivery: <span>Fast Shipping Across Pakistan (2-4 Days)</span></li>
+                    </ul>
+                </div>
+
+                <button class="add-cart-btn" onclick="addToCartFromDetail()">🛒 Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProduct = null;
+        let selectedSize = '';
+
+        async function loadProductDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            if (!productId) { window.location.href = '/'; return; }
+
+            try {
+                const res = await fetch('/api/products');
+                const products = await res.json();
+                currentProduct = products.find(p => p.id == productId);
+
+                if (!currentProduct) {
+                    alert("Product not found!");
+                    window.location.href = '/';
+                    return;
+                }
+
+                document.getElementById('prod-name').innerText = currentProduct.name;
+                document.getElementById('prod-price').innerText = `Rs ${currentProduct.price}.00`;
+                document.getElementById('prod-stock').innerText = `✓ In Stock (${currentProduct.stock || 10} available)`;
+                document.getElementById('spec-cat').innerText = currentProduct.category || 'Football';
+                document.getElementById('spec-subcat').innerText = currentProduct.subCategory || 'Gear';
+
+                // Setup Images Gallery
+                let images = currentProduct.images && currentProduct.images.length > 0 ? currentProduct.images : [currentProduct.image];
+                document.getElementById('main-preview').src = images[0];
+
+                const thumbContainer = document.getElementById('thumbnails-container');
+                thumbContainer.innerHTML = '';
+                images.forEach((imgUrl, index) => {
+                    thumbContainer.innerHTML += `<img src="${imgUrl}" class="thumb-img ${index === 0 ? 'active' : ''}" onclick="changeImage('${imgUrl}', this)">`;
+                });
+
+                // Setup Size options if applicable
+                setupSizes(currentProduct);
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function changeImage(url, element) {
+            document.getElementById('main-preview').src = url;
+            document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function setupSizes(p) {
+            const sizeSec = document.getElementById('size-section');
+            let isJersey = (p.subCategory && p.subCategory.toLowerCase() === 'jerseys') || p.name.toLowerCase().includes('jersey');
+            let isShoe = (p.subCategory && (p.subCategory.toLowerCase() === 'cleats' || p.subCategory.toLowerCase() === 'grippers')) || p.name.toLowerCase().includes('boot') || p.name.toLowerCase().includes('cleat');
+
+            if (isJersey) {
+                selectedSize = 'LARGE (L)';
+                sizeSec.innerHTML = `
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:5px; font-weight:600;">Select Size:</p>
+                    <div style="display:flex; gap:8px; margin-bottom:15px;" id="size-btns">
+                        <button class="size-btn selected" onclick="selectSize('LARGE (L)', this)" style="padding:6px 14px; background:rgba(230,25,25,0.2); border:1px solid var(--primary-red); color:#fff; border-radius:4px; cursor:pointer;">LARGE (L)</button>
+                        <button class="size-btn" onclick="selectSize('MEDIUM (M)', this)" style="padding:6px 14px; background:#111; border:1px solid var(--border-color); color:#fff; border-radius:4px; cursor:pointer;">MEDIUM (M)</button>
+                    </div>`;
+            } else if (isShoe) {
+                selectedSize = 'UK 8';
+                sizeSec.innerHTML = `
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:5px; font-weight:600;">Select Size (UK):</p>
+                    <div style="display:flex; gap:6px; margin-bottom:15px; flex-wrap:wrap;" id="size-btns">
+                        ${['UK 6', 'UK 7', 'UK 8', 'UK 9', 'UK 10', 'UK 11'].map(sz => `
+                            <button class="size-btn ${sz === 'UK 8' ? 'selected' : ''}" onclick="selectSize('${sz}', this)" style="padding:6px 10px; background:${sz === 'UK 8' ? 'rgba(230,25,25,0.2)' : '#111'}; border:1px solid ${sz === 'UK 8' ? 'var(--primary-red)' : 'var(--border-color)'}; color:#fff; border-radius:4px; cursor:pointer;">${sz}</button>
+                        `).join('')}
+                    </div>`;
+            }
+        }
+
+        function selectSize(sz, btn) {
+            selectedSize = sz;
+            document.querySelectorAll('#size-btns button').forEach(b => {
+                b.style.background = '#111';
+                b.style.borderColor = 'var(--border-color)';
+            });
+            btn.style.background = 'rgba(230,25,25,0.2)';
+            btn.style.borderColor = 'var(--primary-red)';
+        }
+
+        function addToCartFromDetail() {
+            if (!currentProduct) return;
+            let cart = JSON.parse(localStorage.getItem('hussain_cart')) || [];
+            let uniqueKey = selectedSize ? `${currentProduct.id}-${selectedSize}` : `${currentProduct.id}-nosize`;
+            let itemName = selectedSize ? `${currentProduct.name} [Size: ${selectedSize}]` : currentProduct.name;
+
+            let existing = cart.find(i => i.uniqueKey === uniqueKey);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...currentProduct, uniqueKey, size: selectedSize, quantity: 1, name: itemName });
+            }
+            localStorage.setItem('hussain_cart', JSON.stringify(cart));
+            alert(`${itemName} successfully added to cart!`);
+        }
+
+        loadProductDetails();
+    </script>
+</body>
+</html>

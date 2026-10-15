@@ -194,10 +194,11 @@
             display: flex; flex-direction: column; transition: transform 0.3s, border-color 0.3s;
         }
         .product-card:hover { transform: translateY(-5px); border-color: var(--primary-red); }
-        .product-card img { width: 100%; height: 160px; object-fit: cover; background: #111; }
+        .product-card img { width: 100%; height: 160px; object-fit: cover; background: #111; cursor: pointer; }
         .product-info { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         
-        .product-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; text-transform: uppercase; }
+        .product-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; text-transform: uppercase; cursor: pointer; }
+        .product-title:hover { color: var(--primary-red); }
         .stock-badge { font-size: 11px; font-weight: bold; color: #22c55e; display: block; margin-bottom: 2px; }
         .stock-count { font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 6px; }
         
@@ -506,14 +507,14 @@
                 list.innerHTML += `
                     <div class="product-card">
                         <div>
-                            <img id="main-img-${p.id}" src="${imageList[0]}" alt="${p.name}">
+                            <img id="main-img-${p.id}" src="${imageList[0]}" alt="${p.name}" onclick="window.location.href='product.html?id=${p.id}'">
                             ${thumbnailsHtml}
                         </div>
                         <div class="product-info">
                             <div>
                                 <span class="stock-badge">✓ In Stock</span>
                                 <span class="stock-count">${stockQty} available</span>
-                                <div class="product-title">${p.name}</div>
+                                <div class="product-title" onclick="window.location.href='product.html?id=${p.id}'">${p.name}</div>
                                 <div class="price-box">
                                     <span class="product-price">Rs ${p.price}.00</span>
                                     <span class="old-price">Rs ${oldPrice}.00</span>
