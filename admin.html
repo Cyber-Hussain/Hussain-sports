@@ -42,6 +42,12 @@
         .action-btn { background: var(--accent); color: white; border: none; padding: 10px; border-radius: var(--radius); font-weight: 600; cursor: pointer; transition: background 0.3s; width: 100%; }
         .action-btn:hover { background: var(--accent-hover); }
 
+        /* ANALYTICS CARDS */
+        .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 35px; }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+        .stat-card h4 { color: var(--text-muted); font-size: 13px; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+        .stat-card .stat-value { font-size: 24px; font-weight: 800; color: #fff; }
+
         table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-top: 15px; }
         th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
         th { background: rgba(99, 102, 241, 0.1); color: var(--accent); }
@@ -70,42 +76,27 @@
 
         <!-- Admin Dashboard Content -->
         <div id="admin-dashboard" style="display: none;">
-            <h2 style="margin-bottom: 30px; color: var(--accent);">📊 Admin Panel - Store Management</h2>
+            <h2 style="margin-bottom: 25px; color: var(--accent);">📊 Store Analytics & Orders Dashboard</h2>
+
+            <!-- Analytics Cards Grid -->
+            <div class="analytics-grid">
+                <div class="stat-card">
+                    <h4>Total Orders</h4>
+                    <div class="stat-value" id="stat-total-orders">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Sales Revenue</h4>
+                    <div class="stat-value" id="stat-total-revenue" style="color: #22c55e;">Rs 0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Top Selling Item</h4>
+                    <div class="stat-value" id="stat-top-item" style="font-size: 16px; line-height: 1.4; color: #facc15;">-</div>
+                </div>
+            </div>
 
             <h3 style="color: #6366f1; border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 20px;">📦 Customer Orders Received</h3>
             <table id="admin-orders-table">
                 <tr><th>ID / Tracking</th><th>Customer Info</th><th>Payment</th><th>Items</th><th>Address</th><th>Status & Action</th><th>Date</th></tr>
-            </table>
-
-            <h3 style="border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-top: 45px; margin-bottom: 20px;">Add New Product</h3>
-            <form onsubmit="addProduct(event)" style="background: var(--bg-card); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 40px;">
-                <label>Product Name:</label>
-                <input type="text" id="new-name" required>
-                <label>Price (PKR):</label>
-                <input type="number" id="new-price" required>
-                <label>Stock Quantity:</label>
-                <input type="number" id="new-stock" required placeholder="e.g. 15" min="0">
-                <label>Category:</label>
-                <select id="new-cat" required onchange="updatesubCategoryOptions()">
-                    <option value="Football">Football</option>
-                    <option value="Cricket">Cricket</option>
-                </select>
-                <label>Sub-Category:</label>
-                <select id="new-subcat" required>
-                    <option value="Balls">Balls</option>
-                    <option value="Jerseys">Jerseys</option>
-                    <option value="Cleats">Cleats</option>
-                    <option value="Grippers">Grippers</option>
-                    <option value="Accessories">Accessories</option>
-                </select>
-                <label>Upload Image:</label>
-                <input type="file" id="new-image" accept="image/*">
-                <button type="submit" class="action-btn" style="margin-top: 10px;">Save Product</button>
-            </form>
-
-            <h3 style="border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 20px;">Manage Existing Products</h3>
-            <table id="admin-product-table">
-                <tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock Management</th><th>Action</th></tr>
             </table>
         </div>
     </div>
@@ -116,8 +107,7 @@
         if (adminPassToken === "hussain123") {
             document.getElementById('admin-login-box').style.display = 'none';
             document.getElementById('admin-dashboard').style.display = 'block';
-            loadAdminProducts();
-            loadAdminOrders();
+            loadAdminData();
         }
 
         function verifyAdmin(e) {
@@ -128,65 +118,36 @@
                 localStorage.setItem('hussain_admin_token', adminPassToken);
                 document.getElementById('admin-login-box').style.display = 'none';
                 document.getElementById('admin-dashboard').style.display = 'block';
-                loadAdminProducts();
-                loadAdminOrders();
+                loadAdminData();
             } else {
                 alert("Incorrect Password!");
             }
         }
 
-        function updatesubCategoryOptions() {
-            const cat = document.getElementById('new-cat').value;
-            const subcat = document.getElementById('new-subcat');
-            subcat.innerHTML = cat === 'Football' 
-                ? '<option value="Balls">Balls</option><option value="Jerseys">Jerseys</option><option value="Cleats">Cleats</option><option value="Grippers">Grippers</option><option value="Accessories">Accessories</option>'
-                : '<option value="Balls">Balls</option><option value="Jerseys">Jerseys</option><option value="Accessories">Accessories</option>';
-        }
-
-        async function loadAdminProducts() {
+        async function loadAdminData() {
             try {
-                const res = await fetch('/api/products');
-                const products = await res.json();
-                const table = document.getElementById('admin-product-table');
-                table.innerHTML = `<tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock Management</th><th>Action</th></tr>`;
-                
-                products.forEach(p => {
-                    let stockCount = p.stock !== undefined ? p.stock : 10;
-                    table.innerHTML += `
-                        <tr>
-                            <td>#${p.id}</td>
-                            <td><img src="${p.image}" width="40" height="40" style="object-fit:cover; border-radius:4px;"></td>
-                            <td>${p.name}</td>
-                            <td>${p.category} / ${p.subCategory}</td>
-                            <td>PKR ${p.price}</td>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <button style="background: var(--border); color: white; border: none; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="updateStockDirect(${p.id}, -1)">-</button>
-                                    <span style="font-weight: 600; min-width: 30px; text-align: center;">${stockCount}</span>
-                                    <button style="background: var(--border); color: white; border: none; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="updateStockDirect(${p.id}, 1)">+</button>
-                                    <button style="background: var(--accent); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-left: 5px;" onclick="updateStockDirect(${p.id}, 10)">+10</button>
-                                </div>
-                            </td>
-                            <td>
-                                <button class="action-btn" style="padding: 5px 10px; font-size: 12px; background:#64748b;" onclick="deleteProduct(${p.id})">Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            } catch (err) { console.error("Error loading admin products:", err); }
-        }
-
-        async function loadAdminOrders() {
-            try {
+                // Fetch Orders
                 const res = await fetch('/api/admin/orders', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ token: adminPassToken }) });
                 const data = await res.json();
                 if (!data.success) return;
+                
+                const orders = data.orders;
+
+                // Fetch Stats
+                const statsRes = await fetch('/api/admin/stats', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ token: adminPassToken }) });
+                const statsData = await statsRes.json();
+
+                if (statsData.success) {
+                    document.getElementById('stat-total-orders').innerText = orders.length;
+                    document.getElementById('stat-total-revenue').innerText = `Rs ${statsData.totalSales}.00`;
+                    document.getElementById('stat-top-item').innerText = statsData.topSellingProduct;
+                }
+
                 const table = document.getElementById('admin-orders-table');
                 table.innerHTML = `<tr><th>ID / Tracking</th><th>Customer Info</th><th>Payment</th><th>Items</th><th>Address</th><th>Status & Action</th><th>Date</th></tr>`;
-                data.orders.forEach(o => {
+                
+                orders.forEach(o => {
                     let itemsList = o.items.map(i => `${i.name} (x${i.quantity || 1})`).join('<br>');
-                    
-                    // Added payment proof link generation here
                     let paymentProofHtml = '';
                     if (o.paymentScreenshot) {
                         paymentProofHtml = `<br><a href="${o.paymentScreenshot}" target="_blank" style="color: #22c55e; font-weight: bold; font-size: 12px; text-decoration: underline;">🖼️ View Screenshot</a>`;
@@ -212,7 +173,7 @@
                         </tr>
                     `;
                 });
-            } catch (err) { console.error("Error loading orders:", err); }
+            } catch (err) { console.error("Error loading admin data:", err); }
         }
 
         async function updateOrderStatus(orderId) {
@@ -225,53 +186,8 @@
                 });
                 const data = await res.json();
                 alert(data.message);
-                loadAdminOrders();
+                loadAdminData();
             } catch (err) { console.error("Error updating order status:", err); }
-        }
-
-        async function updateStockDirect(productId, changeAmount) {
-            try {
-                const res = await fetch('/api/admin/products/stock', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: adminPassToken, productId, change: changeAmount })
-                });
-                const data = await res.json();
-                if(data.success) { loadAdminProducts(); } else { alert(data.message); }
-            } catch (err) { console.error("Error updating stock:", err); }
-        }
-
-        async function addProduct(e) {
-            e.preventDefault();
-            const formData = new FormData();
-            formData.append('token', adminPassToken);
-            formData.append('name', document.getElementById('new-name').value);
-            formData.append('price', document.getElementById('new-price').value);
-            formData.append('stock', document.getElementById('new-stock').value);
-            formData.append('category', document.getElementById('new-cat').value);
-            formData.append('subCategory', document.getElementById('new-subcat').value);
-            const imgFile = document.getElementById('new-image').files[0];
-            if (imgFile) formData.append('productImage', imgFile);
-
-            try {
-                const res = await fetch('/api/admin/products/add', { method: 'POST', body: formData });
-                const data = await res.json();
-                alert(data.message);
-                e.target.reset();
-                loadAdminProducts();
-            } catch (err) { console.error("Error adding product:", err); }
-        }
-
-        async function deleteProduct(id) {
-            if (!confirm("Are you sure you want to delete this product?")) return;
-            try {
-                await fetch('/api/admin/products/delete', { 
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: adminPassToken, productId: id })
-                });
-                loadAdminProducts();
-            } catch (err) { console.error("Error deleting product:", err); }
         }
     </script>
 </body>

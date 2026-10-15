@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const nodemailer = require('nodemailer'); // Added for email notifications[cite: 9]
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,12 +42,21 @@ if (!fs.existsSync(productsFile)) {
     writeJSON(productsFile, []);
 }
 
+// Nodemailer transporter setup for Email Alerts
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'your-email@gmail.com', // Yahan apni email dein[cite: 9]
+        pass: 'your-app-password'     // Yahan Gmail App Password dein[cite: 9]
+    }
+});
+
 // GET ALL PRODUCTS
 app.get('/api/products', (req, res) => {
     res.json(readJSON(productsFile));
 });
 
-// CREATE ORDER
+// CREATE ORDER WITH EMAIL & WHATSAPP NOTIFICATION
 app.post('/api/orders', upload.single('paymentScreenshot'), (req, res) => {
     const { customerName, email, mobile, paymentMethod, address, items, date } = req.body;
     const parsedItems = JSON.parse(items || '[]');
@@ -81,7 +91,28 @@ app.post('/api/orders', upload.single('paymentScreenshot'), (req, res) => {
     });
     writeJSON(productsFile, products);
 
-    res.json({ success: true, message: `Order Placed Successfully! Tracking Number: ${trackingNumber}`, trackingNumber });
+    // --- 1. EMAIL NOTIFICATION TO ADMIN ---
+    let mailOptions = {
+        from: 'your-email@gmail.com',
+        to: 'your-email@gmail.com',
+        subject: `🚨 New Order Received #${newOrder.id} - Hussain Sports`,
+        text: `New order placed by ${newOrder.customerName}!\nMobile: ${newOrder.mobile}\nPayment: ${newOrder.paymentMethod}\nAddress: ${newOrder.address}\nTracking ID: ${newOrder.trackingNumber}`
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) console.log('Email notification error:', error);
+    });
+
+    // --- 2. WHATSAPP NOTIFICATION LINK GENERATION ---
+    let adminWhatsAppNumber = '923014446096';
+    let waMessage = encodeURIComponent(`🚨 New Order #${newOrder.id}\nCustomer: ${newOrder.customerName}\nPhone: ${newOrder.mobile}\nPayment: ${newOrder.paymentMethod}`);
+    let whatsappTriggerUrl = `https://wa.me/${adminWhatsAppNumber}?text=${waMessage}`;
+
+    res.json({ 
+        success: true, 
+        message: `Order Placed Successfully! Tracking Number: ${trackingNumber}`, 
+        trackingNumber,
+        whatsappLink: whatsappTriggerUrl
+    });
 });
 
 // TRACK ORDER
@@ -125,18 +156,17 @@ app.post('/api/admin/stats', (req, res) => {
     });
 
     // Find top selling product
-    let topProduct = "N/A";
+    let topProduct = "No sales yet";
     let maxQty = 0;
     for (let [name, qty] of Object.entries(productSalesCount)) {
         if (qty > maxQty) {
             maxQty = qty;
-            topProduct = name;
+            topProduct = `${name} (${maxQty} sold)`;
         }
     }
 
     res.json({
         success: true,
-        totalProducts: products.length,
         totalSales: totalSales,
         topSellingProduct: topProduct
     });
@@ -156,18 +186,6 @@ app.post('/api/admin/orders/status', (req, res) => {
         res.status(404).json({ success: false, message: "Order not found" });
     }
 });
-
-
-// ADMIN PANEL ROUTE
-app.get('/admin.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin.html'));
-});
-
-// ROOT ROUTE
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 
 // ADMIN: ADD PRODUCT WITH MULTIPLE IMAGES
 app.post('/api/admin/products/add', upload.array('productImages', 4), (req, res) => {
@@ -190,15 +208,14 @@ app.post('/api/admin/products/add', upload.array('productImages', 4), (req, res)
         inStock: parseInt(stock) > 0,
         category,
         subCategory,
-        image: imagePaths[0], // Main cover image
-        images: imagePaths    // Array of all gallery images
+        image: imagePaths[0],
+        images: imagePaths
     };
 
     products.push(newProd);
     writeJSON(productsFile, products);
     res.json({ success: true, message: "Product added successfully with gallery!" });
 });
-
 
 // ADMIN: STOCK INCREMENT / DECREMENT
 app.post('/api/admin/products/stock', (req, res) => {
@@ -212,7 +229,7 @@ app.post('/api/admin/products/stock', (req, res) => {
         writeJSON(productsFile, products);
         res.json({ success: true, newStock: prod.stock });
     } else {
-        res.status(404).json({ success: false, message: "Product not found" });
+        res.status(404).json({ success: false, message: "Server error: Product not found" });
     }
 });
 
@@ -225,7 +242,11 @@ app.post('/api/admin/products/delete', (req, res) => {
     res.json({ success: true });
 });
 
-// ROOT ROUTE
+// ROUTES
+app.get('/admin.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
