@@ -91,16 +91,15 @@ app.post('/api/orders', upload.single('paymentScreenshot'), (req, res) => {
     });
     writeJSON(productsFile, products);
 
-    // --- 1. EMAIL NOTIFICATION TO ADMIN ---
-    let mailOptions = {
-        from: 'your-email@gmail.com',
-        to: 'your-email@gmail.com',
-        subject: `🚨 New Order Received #${newOrder.id} - Hussain Sports`,
-        text: `New order placed by ${newOrder.customerName}!\nMobile: ${newOrder.mobile}\nPayment: ${newOrder.paymentMethod}\nAddress: ${newOrder.address}\nTracking ID: ${newOrder.trackingNumber}`
-    };
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) console.log('Email notification error:', error);
-    });
+  // Nodemailer transporter setup for Email Alerts
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'tacazracee@gmail.com',
+        pass: 'vasi lqsu hquw cwtw' // Yahan apna 16-digit Gmail App Password dein
+    }
+});
+
 
     // --- 2. WHATSAPP NOTIFICATION LINK GENERATION ---
     let adminWhatsAppNumber = '923014446096';
