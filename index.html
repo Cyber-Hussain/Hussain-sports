@@ -378,7 +378,7 @@
                         <p style="font-size: 14px; margin-bottom: 4px;">Account Title: <strong>Mohammad Hussain</strong></p>
                         <p style="font-size: 14px; margin-bottom: 12px;">JazzCash / EasyPaisa / Bank: <strong>03014446096</strong></p>
                         <label style="color: var(--primary-red); font-size: 12px;">Upload Payment Screenshot / Receipt:</label>
-                        <input type="file" id="payment-screenshot" accept="image/*" style="background: #0a0a0c; margin-bottom: 0;" required>
+                        <input type="file" id="payment-screenshot" accept="image/*" style="background: #0a0a0c; margin-bottom: 0;">
                     </div>
                     <label>Complete Shipping Address:</label>
                     <textarea id="cust-address" rows="3" required placeholder="House #, Street, City"></textarea>
@@ -661,53 +661,56 @@
 
         function togglePaymentFields() {
             const method = document.getElementById('cust-payment').value;
-            const screenInput = document.getElementById('payment-screenshot');
             document.getElementById('advance-payment-info').style.display = method === 'Advance' ? 'block' : 'none';
-            if (method === 'Advance') {
-                screenInput.setAttribute('required', 'required');
-            } else {
-                screenInput.removeAttribute('required');
+        }
+
+        async function placeOrder(e) {
+            if (e) e.preventDefault();
+
+            const paymentMethod = document.getElementById('cust-payment').value;
+            const fileInput = document.getElementById('payment-screenshot');
+
+            if (paymentMethod === 'Advance') {
+                if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                    alert("Advance Payment ki surat mein payment screenshot upload karna zaroori hai!");
+                    return;
+                }
+            }
+
+            const formData = new FormData();
+            formData.append('customerName', document.getElementById('cust-name').value);
+            formData.append('email', document.getElementById('cust-email').value);
+            formData.append('mobile', document.getElementById('cust-mobile').value);
+            formData.append('paymentMethod', paymentMethod);
+            formData.append('address', document.getElementById('cust-address').value);
+            formData.append('items', JSON.stringify(cart));
+            formData.append('date', new Date().toLocaleString());
+
+            if (paymentMethod === 'Advance' && fileInput && fileInput.files[0]) {
+                formData.append('paymentScreenshot', fileInput.files[0]);
+            }
+
+            try {
+                const res = await fetch('/api/orders', { method: 'POST', body: formData });
+                const data = await res.json();
+                
+                if (data.success) {
+                    alert(data.message);
+                    cart = [];
+                    localStorage.removeItem('hussain_cart');
+                    updateCartUI();
+                    document.getElementById('order-form').reset();
+                    togglePaymentFields();
+                    switchTab('shop');
+                    fetchProducts();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            } catch (err) {
+                console.error("Order error:", err);
+                alert("Something went wrong. Please check your connection!");
             }
         }
-
-       async function placeOrder(e) {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('customerName', document.getElementById('cust-name').value);
-    formData.append('email', document.getElementById('cust-email').value);
-    formData.append('mobile', document.getElementById('cust-mobile').value);
-    formData.append('paymentMethod', document.getElementById('cust-payment').value);
-    formData.append('address', document.getElementById('cust-address').value);
-    formData.append('items', JSON.stringify(cart));
-    formData.append('date', new Date().toLocaleString());
-
-    if (document.getElementById('cust-payment').value === 'Advance') {
-        const fileInput = document.getElementById('payment-screenshot');
-        if (fileInput && fileInput.files[0]) {
-            formData.append('paymentScreenshot', fileInput.files[0]);
-        }
-    }
-
-    try {
-        const res = await fetch('/api/orders', { method: 'POST', body: formData });
-        const data = await res.json();
-        
-        if (data.success) {
-            alert(data.message);
-            cart = [];
-            localStorage.removeItem('hussain_cart');
-            updateCartUI();
-            document.getElementById('order-form').reset();
-            switchTab('shop');
-            fetchProducts();
-        } else {
-            alert("Error: " + data.message);
-        }
-    } catch (err) {
-        console.error("Order error:", err);
-        alert("Something went wrong. Please check your connection!");
-    }
-}
 
         function orderViaWhatsApp() {
             const name = document.getElementById('cust-name').value;
