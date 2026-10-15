@@ -696,6 +696,12 @@
                 
                 if (data.success) {
                     alert(data.message);
+
+                    // Auto-open WhatsApp chat with pre-filled order details
+                    if (data.whatsappLink) {
+                        window.open(data.whatsappLink, '_blank');
+                    }
+
                     cart = [];
                     localStorage.removeItem('hussain_cart');
                     updateCartUI();
@@ -711,7 +717,7 @@
                 alert("Something went wrong. Please check your connection!");
             }
         }
-
+        
         function orderViaWhatsApp() {
             const name = document.getElementById('cust-name').value;
             const mobile = document.getElementById('cust-mobile').value;
