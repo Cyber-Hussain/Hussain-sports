@@ -157,6 +157,18 @@ app.post('/api/admin/orders/status', (req, res) => {
     }
 });
 
+
+// ADMIN PANEL ROUTE
+app.get('/admin.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// ROOT ROUTE
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+
 // ADMIN: ADD PRODUCT
 app.post('/api/admin/products/add', upload.single('productImage'), (req, res) => {
     if (req.body.token !== 'hussain123') return res.status(403).json({ success: false, message: "Unauthorized" });
