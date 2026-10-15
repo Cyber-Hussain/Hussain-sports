@@ -169,11 +169,19 @@ app.get('/', (req, res) => {
 });
 
 
-// ADMIN: ADD PRODUCT
-app.post('/api/admin/products/add', upload.single('productImage'), (req, res) => {
+// ADMIN: ADD PRODUCT WITH MULTIPLE IMAGES
+app.post('/api/admin/products/add', upload.array('productImages', 4), (req, res) => {
     if (req.body.token !== 'hussain123') return res.status(403).json({ success: false, message: "Unauthorized" });
     const { name, price, stock, category, subCategory } = req.body;
     const products = readJSON(productsFile);
+
+    let imagePaths = [];
+    if (req.files && req.files.length > 0) {
+        imagePaths = req.files.map(file => `/uploads/${file.filename}`);
+    } else {
+        imagePaths = ["https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500"];
+    }
+
     const newProd = {
         id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
         name,
@@ -182,12 +190,15 @@ app.post('/api/admin/products/add', upload.single('productImage'), (req, res) =>
         inStock: parseInt(stock) > 0,
         category,
         subCategory,
-        image: req.file ? `/uploads/${req.file.filename}` : "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500"
+        image: imagePaths[0], // Main cover image
+        images: imagePaths    // Array of all gallery images
     };
+
     products.push(newProd);
     writeJSON(productsFile, products);
-    res.json({ success: true, message: "Product added successfully!" });
+    res.json({ success: true, message: "Product added successfully with gallery!" });
 });
+
 
 // ADMIN: STOCK INCREMENT / DECREMENT
 app.post('/api/admin/products/stock', (req, res) => {

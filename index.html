@@ -492,9 +492,23 @@
                     `;
                 }
 
+                // MULTIPLE IMAGES / GALLERY VIEW SETUP
+                let imageList = p.images && p.images.length > 0 ? p.images : [p.image || "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500"];
+                let thumbnailsHtml = '';
+                if (imageList.length > 1) {
+                    thumbnailsHtml = `<div style="display: flex; gap: 5px; margin-top: 6px; overflow-x: auto; padding-bottom: 2px;">`;
+                    imageList.forEach((imgUrl) => {
+                        thumbnailsHtml += `<img src="${imgUrl}" onclick="changeMainImage(${p.id}, '${imgUrl}')" style="width: 36px; height: 36px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid var(--border-color); flex-shrink: 0;" alt="thumb">`;
+                    });
+                    thumbnailsHtml += `</div>`;
+                }
+
                 list.innerHTML += `
                     <div class="product-card">
-                        <img src="${p.image}" alt="${p.name}">
+                        <div>
+                            <img id="main-img-${p.id}" src="${imageList[0]}" alt="${p.name}">
+                            ${thumbnailsHtml}
+                        </div>
                         <div class="product-info">
                             <div>
                                 <span class="stock-badge">✓ In Stock</span>
@@ -521,6 +535,13 @@
                     </div>
                 `;
             });
+        }
+
+        function changeMainImage(productId, url) {
+            const mainImg = document.getElementById(`main-img-${productId}`);
+            if (mainImg) {
+                mainImg.src = url;
+            }
         }
 
         let selectedCardSizes = {};
