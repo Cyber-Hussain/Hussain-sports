@@ -70,7 +70,7 @@
 
         <!-- Admin Dashboard Content -->
         <div id="admin-dashboard" style="display: none;">
-            <h2 style="margin-bottom: 30px; color: var(--accent);">🔐 Admin Panel - Store Management</h2>
+            <h2 style="margin-bottom: 30px; color: var(--accent);">📊 Admin Panel - Store Management</h2>
 
             <h3 style="color: #6366f1; border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 20px;">📦 Customer Orders Received</h3>
             <table id="admin-orders-table">
@@ -185,11 +185,18 @@
                 table.innerHTML = `<tr><th>ID / Tracking</th><th>Customer Info</th><th>Payment</th><th>Items</th><th>Address</th><th>Status & Action</th><th>Date</th></tr>`;
                 data.orders.forEach(o => {
                     let itemsList = o.items.map(i => `${i.name} (x${i.quantity || 1})`).join('<br>');
+                    
+                    // Added payment proof link generation here
+                    let paymentProofHtml = '';
+                    if (o.paymentScreenshot) {
+                        paymentProofHtml = `<br><a href="${o.paymentScreenshot}" target="_blank" style="color: #22c55e; font-weight: bold; font-size: 12px; text-decoration: underline;">🖼️ View Screenshot</a>`;
+                    }
+
                     table.innerHTML += `
                         <tr>
                             <td>#${o.id}<br><span style="color:var(--accent); font-size:11px;">${o.trackingNumber}</span></td>
                             <td><strong>${o.customerName}</strong><br><span style="color:var(--text-muted);">${o.mobile}</span></td>
-                            <td>${o.paymentMethod}</td>
+                            <td>${o.paymentMethod}${paymentProofHtml}</td>
                             <td>${itemsList}</td>
                             <td>${o.address}</td>
                             <td>
