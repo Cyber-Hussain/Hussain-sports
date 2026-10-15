@@ -254,25 +254,30 @@
 </head>
 <body>
 
-    <!-- IMMERSIVE SPLASH SCREEN WITH YOUTUBE SHORT INTRO -->
-    <div id="splash-screen">
-        <button class="skip-btn" onclick="enterWebsite()">Skip Intro ↗</button>
-        <div class="splash-content">
-            <div style="position: relative; width: 280px; height: 450px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 0 35px rgba(230,25,25,0.8); border: 2px solid var(--primary-red);">
-                <iframe src="https://youtube.com/shorts/tS_PGbCwOWs?si=IaL6c27Bazj0aWOU" 
-                        title="Hussain Sports Intro" 
-                        style="width: 100%; height: 100%; border: none; pointer-events: none;" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-                </iframe>
-                <!-- Clickable overlay to enter store anytime -->
-                <div onclick="enterWebsite()" style="position: absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;"></div>
-            </div>
-            <div class="splash-logo-main" style="margin-top: 15px;">HUSSAIN</div>
-            <div class="splash-logo-sub">SPORTS ⚽</div>
-            <p style="color: var(--text-muted); margin-top: 8px; font-weight: 600; font-size: 12px; letter-spacing: 1px; cursor: pointer;" onclick="enterWebsite()">CLICK ANYWHERE TO ENTER STORE</p>
+   <!-- IMMERSIVE FULLSCREEN VIDEO SPLASH SCREEN -->
+    <div id="splash-screen" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        
+        <!-- Local Video jo poori screen par chale gi (Apni video ka naam project folder mein 'intro.mp4' rakh dein) -->
+        <video id="intro-video" autoplay muted playsinline onended="enterWebsite()" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;" onclick="enterWebsite()">
+            <source src="intro.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        
+        <!-- Video ke upar halka dark tint taake text saaf nazar aaye -->
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.45); z-index: 2;"></div>
+
+        <!-- Skip Button -->
+        <button class="skip-btn" onclick="enterWebsite()" style="position: absolute; top: 25px; right: 30px; z-index: 10;">Skip Intro ↗</button>
+
+        <!-- Welcome Text & Branding -->
+        <div class="splash-content" style="position: relative; z-index: 3; text-align: center; cursor: pointer;" onclick="enterWebsite()">
+            <div style="font-size: 22px; font-weight: 800; color: #facc15; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 5px; text-shadow: 0 2px 8px rgba(0,0,0,0.9);">WELCOME TO</div>
+            <div class="splash-logo-main" style="font-size: 48px; font-weight: 900; color: #fff; text-shadow: 0 0 20px rgba(0,0,0,0.8);">HUSSAIN</div>
+            <div class="splash-logo-sub" style="font-size: 54px; font-weight: 900; color: var(--primary-red); text-shadow: 0 0 25px rgba(230,25,25,0.8);">SPORTS ⚽</div>
+            <p style="color: #fff; margin-top: 25px; font-weight: 600; font-size: 13px; letter-spacing: 1.5px; text-shadow: 0 2px 6px rgba(0,0,0,0.9);">CLICK ANYWHERE TO ENTER STORE</p>
         </div>
     </div>
-
+    
     <!-- HEADER -->
     <header>
         <div class="brand-logo" onclick="switchTab('shop'); filterCategory('All')">
