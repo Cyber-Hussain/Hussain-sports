@@ -95,32 +95,97 @@
         }
         .header-search button:hover { background: var(--dark-red); }
 
-        nav { display: flex; align-items: center; }
-        nav button {
+        .header-nav { display: flex; align-items: center; }
+        .header-nav button {
             background: transparent; border: none; color: var(--text-muted);
             font-size: 14px; font-weight: 700; margin-left: 20px;
             cursor: pointer; transition: color 0.3s;
         }
-        nav button:hover, nav button.active { color: var(--primary-red); }
+        .header-nav button:hover, .header-nav button.active { color: var(--primary-red); }
+
+        /* --- CATEGORY NAVBAR (IMAGE STYLE) --- */
+        .category-navbar {
+            background-color: #121418;
+            border-bottom: 2px solid var(--border-color);
+            padding: 0 40px;
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            position: sticky;
+            top: 71px;
+            z-index: 99;
+        }
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-category-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 14px 18px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.3s, background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-category-btn:hover, .nav-category-btn.active {
+            color: var(--primary-red);
+            background: rgba(230,25,25,0.08);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #16181d;
+            min-width: 180px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.7);
+            z-index: 1000;
+            border-radius: 0 0 6px 6px;
+            border: 1px solid var(--border-color);
+            top: 100%;
+            left: 0;
+        }
+        .dropdown-content a {
+            color: var(--text-muted);
+            padding: 11px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s;
+            text-transform: uppercase;
+        }
+        .dropdown-content a:hover {
+            background-color: var(--primary-red);
+            color: #fff;
+        }
+        .nav-dropdown:hover .dropdown-content {
+            display: block;
+        }
 
         /* --- HERO BANNER --- */
         .hero-banner {
             background: linear-gradient(135deg, rgba(12,12,14,0.75) 0%, rgba(162,16,16,0.65) 100%), 
                         url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1600') center/cover no-repeat;
-            color: white; padding: 80px 20px; text-align: center; border-bottom: 4px solid var(--primary-red);
+            color: white; padding: 60px 20px; text-align: center; border-bottom: 4px solid var(--primary-red);
             box-shadow: inset 0 -30px 40px rgba(0,0,0,0.8);
         }
-        .hero-title { font-size: 46px; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 10px rgba(0,0,0,0.9); }
-        .hero-subtitle { font-size: 22px; color: var(--accent-yellow); font-weight: 800; margin-top: 10px; text-transform: uppercase; text-shadow: 1px 1px 8px rgba(0,0,0,0.9); }
+        .hero-title { font-size: 42px; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 10px rgba(0,0,0,0.9); }
+        .hero-subtitle { font-size: 20px; color: var(--accent-yellow); font-weight: 800; margin-top: 10px; text-transform: uppercase; text-shadow: 1px 1px 8px rgba(0,0,0,0.9); }
 
         /* --- CONTAINER & PRODUCTS (RESPONSIVE GRID) --- */
-        .container { max-width: 1200px; margin: 20px auto 50px auto; padding: 0 20px; flex: 1; width: 100%; }
+        .container { max-width: 1200px; margin: 25px auto 50px auto; padding: 0 20px; flex: 1; width: 100%; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .product-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
             gap: 15px; 
         }
         .product-card {
@@ -190,8 +255,9 @@
         @media (max-width: 768px) {
             header { padding: 12px 15px; flex-direction: column; gap: 10px; }
             .header-search { margin: 10px 0; width: 100%; max-width: 100%; }
-            nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
-            nav button { margin-left: 0; }
+            .header-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+            .header-nav button { margin-left: 0; }
+            .category-navbar { padding: 0 10px; overflow-x: auto; top: 125px; }
             .hero-title { font-size: 26px; }
             .hero-subtitle { font-size: 15px; }
             table { display: block; overflow-x: auto; white-space: nowrap; }
@@ -212,9 +278,9 @@
         </div>
     </div>
 
-    <!-- HEADER (No Admin Links) -->
+    <!-- HEADER -->
     <header>
-        <div class="brand-logo" onclick="switchTab('shop')">
+        <div class="brand-logo" onclick="switchTab('shop'); filterCategory('All')">
             <div class="brand-logo-main">HUSSAIN <span>SPORTS ⚽</span></div>
             <div class="brand-logo-tag">Champions Choose Quality</div>
         </div>
@@ -224,12 +290,43 @@
             <button onclick="filterProducts()">Search</button>
         </div>
 
-        <nav>
-            <button onclick="switchTab('shop')" class="active" id="nav-shop">🏠 Home</button>
+        <div class="header-nav">
+            <button onclick="switchTab('shop'); filterCategory('All')" class="active" id="nav-shop">🏠 Home</button>
             <button onclick="switchTab('track')" id="nav-track">🚚 Track</button>
             <button onclick="switchTab('cart')" id="nav-cart">🛒 Cart (<span id="cart-count">0</span>)</button>
-        </nav>
+        </div>
     </header>
+
+    <!-- CATEGORY NAVBAR (IMAGE DESIGN) -->
+    <nav class="category-navbar">
+        <!-- SHOP BY ALL -->
+        <button class="nav-category-btn active" onclick="filterCategory('All')" id="btn-all">ALL PRODUCTS</button>
+
+        <!-- FOOTBALL DROPDOWN -->
+        <div class="nav-dropdown">
+            <button class="nav-category-btn" onclick="filterCategory('Football')">
+                FOOTBALL ▾
+            </button>
+            <div class="dropdown-content">
+                <a href="#" onclick="filterSubCategory('Football', 'Cleats')">Cleats</a>
+                <a href="#" onclick="filterSubCategory('Football', 'Grippers')">Grippers</a>
+                <a href="#" onclick="filterSubCategory('Football', 'Jerseys')">Jerseys</a>
+                <a href="#" onclick="filterSubCategory('Football', 'Accessories')">Accessories</a>
+            </div>
+        </div>
+
+        <!-- CRICKET DROPDOWN -->
+        <div class="nav-dropdown">
+            <button class="nav-category-btn" onclick="filterCategory('Cricket')">
+                CRICKET ▾
+            </button>
+            <div class="dropdown-content">
+                <a href="#" onclick="filterSubCategory('Cricket', 'Bats')">Bats</a>
+                <a href="#" onclick="filterSubCategory('Cricket', 'Balls')">Balls</a>
+                <a href="#" onclick="filterSubCategory('Cricket', 'Equipment')">Equipment & Gear</a>
+            </div>
+        </div>
+    </nav>
 
     <!-- HERO BANNER -->
     <div class="hero-banner">
@@ -240,21 +337,6 @@
     <div class="container">
         <!-- SHOP TAB -->
         <div id="shop" class="tab-content active">
-            <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
-                <select id="filter-category" onchange="filterProducts()" style="padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
-                    <option value="All">All Categories</option>
-                    <option value="Football">Football</option>
-                    <option value="Cricket">Cricket</option>
-                </select>
-                <select id="filter-subcategory" onchange="filterProducts()" style="padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
-                    <option value="All">All Sub-Categories</option>
-                    <option value="Balls">Balls</option>
-                    <option value="Jerseys">Jerseys</option>
-                    <option value="Cleats">Cleats</option>
-                    <option value="Grippers">Grippers</option>
-                    <option value="Accessories">Accessories</option>
-                </select>
-            </div>
             <div id="product-list" class="product-grid"></div>
         </div>
 
@@ -346,6 +428,8 @@
     <script>
         let allProducts = [];
         let cart = JSON.parse(localStorage.getItem('hussain_cart')) || [];
+        let currentFilterCategory = 'All';
+        let currentFilterSubCategory = 'All';
 
         function enterWebsite() {
             const splash = document.getElementById('splash-screen');
@@ -356,7 +440,7 @@
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.header-nav button').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             if (document.getElementById('nav-' + tabId)) document.getElementById('nav-' + tabId).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -374,7 +458,7 @@
             const list = document.getElementById('product-list');
             list.innerHTML = '';
             if (products.length === 0) {
-                list.innerHTML = `<p style="color: var(--text-muted);">No products found.</p>`;
+                list.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 30px;">No products found in this category.</p>`;
                 return;
             }
             products.forEach(p => {
@@ -383,7 +467,7 @@
                 let oldPrice = Math.round(p.price * 1.3);
 
                 let isJersey = (p.subCategory && p.subCategory.toLowerCase() === 'jerseys') || (p.name && p.name.toLowerCase().includes('jersey'));
-                let isShoe = (p.subCategory && p.subCategory.toLowerCase() === 'cleats') || (p.name && (p.name.toLowerCase().includes('shoe') || p.name.toLowerCase().includes('cleat') || p.name.toLowerCase().includes('boot') || p.name.toLowerCase().includes('f50') || p.name.toLowerCase().includes('predator')));
+                let isShoe = (p.subCategory && (p.subCategory.toLowerCase() === 'cleats' || p.subCategory.toLowerCase() === 'grippers')) || (p.name && (p.name.toLowerCase().includes('shoe') || p.name.toLowerCase().includes('cleat') || p.name.toLowerCase().includes('boot') || p.name.toLowerCase().includes('gripper') || p.name.toLowerCase().includes('f50') || p.name.toLowerCase().includes('predator')));
                 
                 let sizeHtml = '';
                 if (isJersey) {
@@ -486,11 +570,32 @@
             switchTab('cart');
         }
 
+        function filterCategory(category) {
+            currentFilterCategory = category;
+            currentFilterSubCategory = 'All';
+            switchTab('shop');
+            applyFilters();
+        }
+
+        function filterSubCategory(category, subCategory) {
+            currentFilterCategory = category;
+            currentFilterSubCategory = subCategory;
+            switchTab('shop');
+            applyFilters();
+        }
+
         function filterProducts() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const cat = document.getElementById('filter-category').value;
-            const subcat = document.getElementById('filter-subcategory').value;
-            const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query) && (cat === 'All' || p.category === cat) && (subcat === 'All' || p.subCategory === subcat));
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : '';
+            const filtered = allProducts.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(query);
+                const matchesCategory = currentFilterCategory === 'All' || p.category.toLowerCase() === currentFilterCategory.toLowerCase();
+                const matchesSubCategory = currentFilterSubCategory === 'All' || (p.subCategory && p.subCategory.toLowerCase() === currentFilterSubCategory.toLowerCase());
+                return matchesSearch && matchesCategory && matchesSubCategory;
+            });
             displayProducts(filtered);
         }
 
