@@ -459,26 +459,9 @@
             switchTab('shop');
         }
 
-        function promptAdminLogin() {
-            const pwd = prompt("Enter Secret Admin Password:");
-            if (pwd === "hussain123") {
-                adminPassToken = pwd;
-                switchTab('admin');
-            } else if (pwd !== null) {
-                alert("Incorrect Password!");
-            }
-        }
 
         function handleLogoClick() {
-            logoClicks++;
-            clearTimeout(logoTimer);
-            logoTimer = setTimeout(() => { logoClicks = 0; }, 1000);
-            if (logoClicks === 3) {
-                logoClicks = 0;
-                promptAdminLogin();
-            } else if (logoClicks === 1) {
-                switchTab('shop');
-            }
+            switchTab('shop');
         }
 
         function switchTab(tabId) {
