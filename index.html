@@ -378,7 +378,7 @@
                         <p style="font-size: 14px; margin-bottom: 4px;">Account Title: <strong>Mohammad Hussain</strong></p>
                         <p style="font-size: 14px; margin-bottom: 12px;">JazzCash / EasyPaisa / Bank: <strong>03014446096</strong></p>
                         <label style="color: var(--primary-red); font-size: 12px;">Upload Payment Screenshot / Receipt:</label>
-                        <input type="file" id="payment-screenshot" accept="image/*" style="background: #0a0a0c; margin-bottom: 0;">
+                        <input type="file" id="payment-screenshot" accept="image/*" style="background: #0a0a0c; margin-bottom: 0;" required>
                     </div>
                     <label>Complete Shipping Address:</label>
                     <textarea id="cust-address" rows="3" required placeholder="House #, Street, City"></textarea>
@@ -661,7 +661,13 @@
 
         function togglePaymentFields() {
             const method = document.getElementById('cust-payment').value;
+            const screenInput = document.getElementById('payment-screenshot');
             document.getElementById('advance-payment-info').style.display = method === 'Advance' ? 'block' : 'none';
+            if (method === 'Advance') {
+                screenInput.setAttribute('required', 'required');
+            } else {
+                screenInput.removeAttribute('required');
+            }
         }
 
         async function placeOrder(e) {
