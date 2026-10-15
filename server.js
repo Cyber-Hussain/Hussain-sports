@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const nodemailer = require('nodemailer'); // Added for email notifications[cite: 9]
+const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -46,8 +46,8 @@ if (!fs.existsSync(productsFile)) {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'your-email@gmail.com', // Yahan apni email dein[cite: 9]
-        pass: 'your-app-password'     // Yahan Gmail App Password dein[cite: 9]
+        user: 'tacazracee@gmail.com',
+        pass: 'vasi lqsu hquw cwtw'
     }
 });
 
@@ -91,19 +91,26 @@ app.post('/api/orders', upload.single('paymentScreenshot'), (req, res) => {
     });
     writeJSON(productsFile, products);
 
-  // Nodemailer transporter setup for Email Alerts
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'tacazracee@gmail.com',
-        pass: 'vasi lqsu hquw cwtw' // Yahan apna 16-digit Gmail App Password dein
-    }
-});
+    // --- SEND EMAIL NOTIFICATION TO ADMIN ---
+    let itemsSummary = parsedItems.map(i => `${i.name} (Qty: ${i.quantity})`).join('\n');
+    const mailOptions = {
+        from: 'tacazracee@gmail.com',
+        to: 'tacazracee@gmail.com',
+        subject: `🚨 New Order Received #${newOrder.id} - Hussain Sports`,
+        text: `A new order has been placed!\n\nCustomer Name: ${customerName}\nMobile: ${mobile}\nEmail: ${email}\nPayment Method: ${paymentMethod}\nAddress: ${address}\nTracking Number: ${trackingNumber}\n\nItems:\n${itemsSummary}`
+    };
 
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error("Email send error:", error);
+        } else {
+            console.log("Email sent successfully:", info.response);
+        }
+    });
 
-    // --- 2. WHATSAPP NOTIFICATION LINK GENERATION ---
+    // --- WHATSAPP NOTIFICATION LINK GENERATION ---
     let adminWhatsAppNumber = '923014446096';
-    let waMessage = encodeURIComponent(`🚨 New Order #${newOrder.id}\nCustomer: ${newOrder.customerName}\nPhone: ${newOrder.mobile}\nPayment: ${newOrder.paymentMethod}`);
+    let waMessage = encodeURIComponent(`🚨 New Order #${newOrder.id}\nCustomer: ${newOrder.customerName}\nPhone: ${newOrder.mobile}\nPayment: ${newOrder.paymentMethod}\nTracking: ${trackingNumber}`);
     let whatsappTriggerUrl = `https://wa.me/${adminWhatsAppNumber}?text=${waMessage}`;
 
     res.json({ 
@@ -154,7 +161,6 @@ app.post('/api/admin/stats', (req, res) => {
         }
     });
 
-    // Find top selling product
     let topProduct = "No sales yet";
     let maxQty = 0;
     for (let [name, qty] of Object.entries(productSalesCount)) {
